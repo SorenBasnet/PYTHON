@@ -1,8 +1,11 @@
 """
-A Context Manager is a more elegant way to handle setup and teardown logic. The most common example is opening a file.
+A Context Manager is a more elegant way to handle setup and teardown logic. The most 
+common example is opening a file.
 
 The Problem: Manual Cleanup
-If you open a file manually, you must remember to close it. If your code crashes before it reaches file.close(), the file stays open in memory, which can lead to data corruption.
+If you open a file manually, you must remember to close it. If your code crashes 
+before it reaches file.close(), the file stays open in memory, which can lead 
+to data corruption.
 """
 
 f = open("data.txt", "w")
@@ -12,7 +15,8 @@ f.close()
 
 """
 The Solution: The with keyword
-The with statement automatically handles the closing for you, even if an error occurs inside the block.
+The with statement automatically handles the closing for you, even if an error 
+occurs inside the block.
 
 """
 
@@ -23,7 +27,8 @@ with open("data.txt", "w") as f:
 
 """
 3. Creating Your Own Context Manager
-You can turn any class into a context manager by defining two "magic methods": __enter__ and __exit__.
+You can turn any class into a context manager by defining two 
+"magic methods": __enter__ and __exit__.
 
 """
 
