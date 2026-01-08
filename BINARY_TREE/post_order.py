@@ -10,5 +10,5 @@ class TreeNode:
     def postorderTraversal(self, root): 
         if not root: 
             return []
-        return self.postorderTraversal[root.left] + self.postorderTraversal[root.right] + self.postorderTraversal[root.val]
+        return self.postorderTraversal[root.left] + self.postorderTraversal[root.right] + [root.val]
 
