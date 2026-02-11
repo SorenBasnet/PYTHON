@@ -1,0 +1,25 @@
+---
+title: "dsc_file"
+output: html_document
+---
+
+```{r}
+library(readr)
+```
+
+
+```{r}
+z <- read.csv("/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/my_dataset.csv", header=TRUE, sep=";")
+
+nvars <- ncol(z)
+nvars
+write("/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/my_dataset.csv", file="dsc.txt")
+
+write("NA", file="dsc.txt", append=TRUE)
+write("2", file="dsc.txt", append=TRUE)
+roles <- rep("n", nvars)
+
+write.table(cbind(1:nvars, names(z), roles), file="dsc.txt", col.names = FALSE, row.names=FALSE, append=TRUE, quote=FALSE)
+
+```
+

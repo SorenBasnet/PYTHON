@@ -1,0 +1,280 @@
+---
+title: "eda_tcga_brca"
+output: html_document
+---
+
+Import required dataset
+```{r}
+library(readr) # helps with reading tsv files
+library(dplyr)
+```
+
+Global variables
+```{r}
+dataset_path <- "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/"
+```
+
+Import clinical datasets
+```{r}
+
+clinical_dataset  <- read_tsv(file.path(dataset_path,"clinical/clinical.tsv"), show_col_types = FALSE)
+familial_dataset  <- read_tsv(file.path(dataset_path, "clinical/follow_up.tsv"), show_col_types = FALSE)
+pathology_dataset <- read_tsv(file.path(dataset_path, "clinical/pathology_detail.tsv"), show_col_types = FALSE)
+colnames(pathology_dataset)
+exposure_dataset  <- read_tsv(file.path(dataset_path, "clinical/exposure.tsv"), show_col_types = FALSE)
+colnames(exposure_dataset)
+follow_up_dataset <- read_tsv(file.path(dataset_path, "clinical/follow_up.tsv"), show_col_types = FALSE)
+
+```
+
+Import biospecimen datasets 
+```{r}
+
+aliquot_dataset <- read_tsv(file.path(dataset_path, "biospecimen/aliquot.tsv"), show_col_types = FALSE)
+analyte_dataset <- read_tsv(file.path(dataset_path, "biospecimen/analyte.tsv"), show_col_types = FALSE)
+portion_dataset <- read_tsv(file.path(dataset_path, "biospecimen/portion.tsv"), show_col_types = FALSE)
+sample_dataset  <- read_tsv(file.path(dataset_path, "biospecimen/sample.tsv"), show_col_types = FALSE)
+slide_dataset   <- read_tsv(file.path(dataset_path, "biospecimen/slide.tsv"), show_col_types = FALSE)
+
+```
+
+
+Number of cases 
+```{r}
+common_col_names <- Reduce(intersect,
+  list(
+    colnames(clinical_dataset),
+    colnames(familial_dataset), 
+    colnames(pathology_dataset), 
+    colnames(exposure_dataset), 
+    colnames(follow_up_dataset), 
+    colnames(aliquot_dataset), 
+    colnames(analyte_dataset), 
+    colnames(portion_dataset), 
+    colnames(sample_dataset), 
+    colnames(slide_dataset)
+  )
+)
+
+print(common_col_names)
+
+
+# same thing can be done as 
+
+# Source - https://stackoverflow.com/a/67691108
+# Posted by Jonas
+# Retrieved 2026-02-07, License - CC BY-SA 4.0
+
+dfList <- list(clinical_dataset, familial_dataset, pathology_dataset, exposure_dataset, follow_up_dataset, aliquot_dataset, analyte_dataset, portion_dataset, sample_dataset, slide_dataset)
+dfColList <- lapply(dfList,names)
+commonCols <- Reduce(intersect,dfColList)
+ 
+print(commonCols)
+```
+
+
+Cleaning 
+```{r}
+
+clinical_dataset  <- read_tsv(file.path(dataset_path,"clinical/clinical.tsv"), show_col_types = FALSE)
+clinical_dataset <- clinical_dataset %>% filter(grepl("United States", demographic.country_of_residence_at_enrollment))
+clinical_dataset[clinical_dataset == "'--"] <- NA
+clinical_dataset$treatments.treatment_type <- factor(clinical_dataset$treatments.treatment_type)
+clinical_dataset$treatments.treatment_outcome <- factor(clinical_dataset$treatments.treatment_outcome)
+clinical_dataset$treatments.treatment_or_therapy <- factor(clinical_dataset$treatments.treatment_or_therapy)
+clinical_dataset$treatments.treatment_intent_type <- factor(clinical_dataset$treatments.treatment_intent_type)
+clinical_dataset$treatments.treatment_dose_units <- factor(clinical_dataset$treatments.treatment_dose_units)
+clinical_dataset$treatments.treatment_dose <- as.numeric(clinical_dataset$treatments.treatment_dose)
+clinical_dataset$treatments.treatment_anatomic_sites <- factor(clinical_dataset$treatments.treatment_anatomic_sites)
+clinical_dataset$treatments.therapeutic_agents <- factor(clinical_dataset$treatments.therapeutic_agents)
+clinical_dataset$treatments.route_of_administration <- factor(clinical_dataset$treatments.route_of_administration)
+clinical_dataset$treatments.regimen_or_line_of_therapy <- factor(clinical_dataset$treatments.regimen_or_line_of_therapy)
+clinical_dataset$diagnoses.classification_of_tumor <- factor(clinical_dataset$diagnoses.classification_of_tumor)
+clinical_dataset$demographic.vital_status <- factor(clinical_dataset$demographic.vital_status)
+clinical_dataset$demographic.race <- factor(clinical_dataset$demographic.race)
+clinical_dataset$treatments.margin_status <- factor(clinical_dataset$treatments.margin_status)
+clinical_dataset$diagnoses.ajcc_pathologic_m <- factor(clinical_dataset$diagnoses.ajcc_pathologic_m)
+clinical_dataset$diagnoses.tissue_or_organ_of_origin <- factor(clinical_dataset$diagnoses.tissue_or_organ_of_origin)
+clinical_dataset$demographic.gender <- factor(clinical_dataset$demographic.gender)
+clinical_dataset$diagnoses.diagnosis_is_primary_disease <- factor(clinical_dataset$diagnoses.diagnosis_is_primary_disease)
+clinical_dataset$diagnoses.icd_10_code <- factor(clinical_dataset$diagnoses.icd_10_code)
+clinical_dataset$diagnoses.age_at_diagnosis <- as.numeric(clinical_dataset$diagnoses.age_at_diagnosis)
+clinical_dataset$diagnoses.method_of_diagnosis <- factor(clinical_dataset$diagnoses.method_of_diagnosis)
+clinical_dataset$diagnoses.metastasis_at_diagnosis <- factor(clinical_dataset$diagnoses.metastasis_at_diagnosis)
+clinical_dataset$cases.disease_type <- factor(clinical_dataset$cases.disease_type)
+clinical_dataset$cases.lost_to_followup <- factor(clinical_dataset$cases.lost_to_followup)
+clinical_dataset$cases.primary_site <- factor(clinical_dataset$cases.primary_site)
+clinical_dataset$demographic.age_at_index <- as.numeric(clinical_dataset$demographic.age_at_index)
+clinical_dataset$demographic.days_to_birth <- as.numeric(clinical_dataset$demographic.days_to_birth)
+clinical_dataset$demographic.days_to_death <- as.numeric(clinical_dataset$demographic.days_to_death)
+clinical_dataset$diagnoses.ajcc_pathologic_n <- factor(clinical_dataset$diagnoses.ajcc_pathologic_n)
+clinical_dataset$diagnoses.ajcc_pathologic_stage <- factor(clinical_dataset$diagnoses.ajcc_pathologic_stage)
+clinical_dataset$diagnoses.ajcc_pathologic_t <- factor(clinical_dataset$diagnoses.ajcc_pathologic_t)
+clinical_dataset$diagnoses.ajcc_staging_system_edition <- factor(clinical_dataset$diagnoses.ajcc_staging_system_edition)
+clinical_dataset$diagnoses.days_to_diagnosis <- as.numeric(clinical_dataset$diagnoses.days_to_diagnosis)
+clinical_dataset$diagnoses.days_to_last_follow_up <- as.numeric(clinical_dataset$diagnoses.days_to_last_follow_up)
+clinical_dataset$diagnoses.year_of_diagnosis <- as.numeric(clinical_dataset$diagnoses.year_of_diagnosis)
+clinical_dataset$diagnoses.site_of_resection_or_biopsy <- factor(clinical_dataset$diagnoses.site_of_resection_or_biopsy)
+clinical_dataset$diagnoses.primary_diagnosis <- factor(clinical_dataset$diagnoses.primary_diagnosis)
+clinical_dataset$diagnoses.prior_malignancy <- factor(clinical_dataset$diagnoses.prior_malignancy)
+clinical_dataset$diagnoses.prior_treatment <- factor(clinical_dataset$diagnoses.prior_treatment)
+clinical_dataset$diagnoses.sites_of_involvement <- factor(clinical_dataset$diagnoses.sites_of_involvement)
+clinical_dataset$diagnoses.synchronous_malignancy <- factor(clinical_dataset$diagnoses.synchronous_malignancy)
+
+
+
+
+#diagnoses.sites_of_involvement
+
+clinical_dataset = subset(clinical_dataset, select = -c(cases.consent_type, cases.days_to_consent, treatments.treatment_outcome_duration, demographic.age_is_obfuscated, demographic.marital_status, demographic.occupation_duration_years, demographic.population_group, demographic.premature_at_birth, diagnoses.adrenal_hormone, demographic.year_of_death, demographic.year_of_birth, demographic.weeks_gestation_at_birth, cases.days_to_lost_to_followup                    , demographic.cause_of_death                       , demographic.cause_of_death_source,                     
+demographic.country_of_birth                      , demographic.education_level                      , diagnoses.ajcc_clinical_m         ,         
+diagnoses.ajcc_clinical_n                         , diagnoses.ajcc_clinical_stage                    , diagnoses.ajcc_clinical_t          ,               
+diagnoses.ajcc_serum_tumor_markers                , diagnoses.ann_arbor_b_symptoms                   , diagnoses.ann_arbor_b_symptoms_described,
+diagnoses.ann_arbor_clinical_stage                , diagnoses.ann_arbor_extranodal_involvement       , diagnoses.ann_arbor_pathologic_stage,
+diagnoses.best_overall_response                   , diagnoses.burkitt_lymphoma_clinical_variant      , diagnoses.calgb_risk_group,
+diagnoses.cancer_detection_method                 , diagnoses.child_pugh_classification              , diagnoses.clark_level,
+diagnoses.cog_liver_stage                         , diagnoses.cog_neuroblastoma_risk_group           , diagnoses.cog_renal_stage,
+diagnoses.cog_rhabdomyosarcoma_risk_group         , diagnoses.contiguous_organ_invaded               , diagnoses.days_to_best_overall_response,
+diagnoses.days_to_last_known_disease_status       , diagnoses.days_to_recurrence                     , diagnoses.double_expressor_lymphoma,
+diagnoses.double_hit_lymphoma                     , diagnoses.eln_risk_classification                , diagnoses.enneking_msts_grade,
+diagnoses.enneking_msts_metastasis                , diagnoses.enneking_msts_stage                    , diagnoses.enneking_msts_tumor_site,
+diagnoses.ensat_clinical_m                        , diagnoses.ensat_pathologic_n                     , diagnoses.ensat_pathologic_stage,
+diagnoses.ensat_pathologic_t                      , diagnoses.esophageal_columnar_dysplasia_degree   , diagnoses.esophageal_columnar_metaplasia_present,
+diagnoses.fab_morphology_code                     , diagnoses.figo_stage                             , diagnoses.figo_staging_edition_year,
+diagnoses.first_symptom_longest_duration          , diagnoses.first_symptom_prior_to_diagnosis       , diagnoses.gastric_esophageal_junction_involvement,
+diagnoses.gleason_grade_group                     , diagnoses.gleason_grade_tertiary                 , diagnoses.gleason_patterns_percent,
+diagnoses.gleason_score                           , diagnoses.goblet_cells_columnar_mucosa_present   , diagnoses.igcccg_stage,
+diagnoses.inpc_grade                              , diagnoses.inpc_histologic_group                  , diagnoses.inrg_stage,
+diagnoses.inss_stage                              , diagnoses.international_prognostic_index         , diagnoses.irs_group,
+diagnoses.irs_stage                               , diagnoses.ishak_fibrosis_score                   , diagnoses.iss_stage,
+diagnoses.last_known_disease_status               , diagnoses.margin_distance                        , diagnoses.margins_involved_site,
+diagnoses.masaoka_stage                           , diagnoses.max_tumor_bulk_site                    , diagnoses.medulloblastoma_molecular_classification,
+diagnoses.melanoma_known_primary                  , diagnoses.metastasis_at_diagnosis_site           , diagnoses.micropapillary_features,
+diagnoses.mitosis_karyorrhexis_index              , diagnoses.mitotic_count                          , diagnoses.ovarian_specimen_status,
+diagnoses.ovarian_surface_involvement             , diagnoses.papillary_renal_cell_type              , diagnoses.pediatric_kidney_staging,
+diagnoses.peritoneal_fluid_cytological_status     , diagnoses.pregnant_at_diagnosis                 , diagnoses.primary_disease,
+diagnoses.primary_gleason_grade                   , diagnoses.progression_or_recurrence              , diagnoses.residual_disease,
+diagnoses.satellite_nodule_present                , diagnoses.secondary_gleason_grade               , diagnoses.sites_of_involvement_count,
+diagnoses.supratentorial_localization             , diagnoses.tumor_burden                           , diagnoses.tumor_confined_to_organ_of_origin,
+diagnoses.tumor_depth                             , diagnoses.tumor_focality                         , diagnoses.tumor_grade,
+diagnoses.tumor_grade_category                    , diagnoses.tumor_regression_grade                 , diagnoses.uicc_clinical_m,
+diagnoses.uicc_clinical_n                         , diagnoses.uicc_clinical_stage                    , diagnoses.uicc_clinical_t,
+diagnoses.uicc_pathologic_m                       , diagnoses.uicc_pathologic_n                      , diagnoses.uicc_pathologic_stage,
+diagnoses.uicc_pathologic_t                       , diagnoses.uicc_staging_system_edition            , diagnoses.ulceration_indicator,
+diagnoses.weiss_assessment_findings               , diagnoses.weiss_assessment_score                 , diagnoses.who_cns_grade,
+diagnoses.who_nte_grade                           , diagnoses.wilms_tumor_histologic_subtype        , treatments.chemo_concurrent_to_radiation,
+treatments.drug_category                          , treatments.embolic_agent                         , treatments.lesions_treated_number,
+treatments.margin_distance                        , treatments.margins_involved_site                 , treatments.pretreatment,
+treatments.protocol_identifier                    , treatments.radiosensitizing_agent                , treatments.reason_treatment_ended,
+treatments.reason_treatment_not_given             , treatments.residual_disease                      , treatments.therapeutic_level_achieved,
+treatments.therapeutic_levels_achieved            , treatments.therapeutic_target_level              , treatments.timepoint_category,
+treatments.treatment_anatomic_site                , treatments.treatment_arm                          , treatments.treatment_dose_max,
+treatments.treatment_duration                     , treatments.treatment_effect                       , treatments.treatment_effect_indicator,
+treatments.treatment_frequency, treatments.treatment_id, treatments.submitter_id, demographic.submitter_id, demographic.country_of_residence_at_enrollment, diagnoses.diagnosis_id, 
+demographic.ethnicity, demographic.demographic_id, diagnoses.submitter_id, project.project_id, cases.index_date, cases.submitter_id, treatments.number_of_cycles, diagnoses.sites_of_involvement))
+
+# include diagnoses.sites_of_involvement later 
+
+
+# demographic.marital_status, demographic.weeks_gestation_at_birth, demographic.year_of_birth, demographic.year_of_death, diagnoses.adrenal_hormone
+# demographic.premature_at_birth - contains no information - NA 
+
+# treatmeants.treatment_id - removed because it is treatment id 
+# treatments.submitter_id - it might already be reflecteed by treatments.therapeutic_agents
+# demographic.submitter_id
+# diagnoses.diagnosis_id
+# demographic.ethnicity # check with prof 
+# demographic.demographic_id
+
+
+# treatments.treatment_dose_units might need some conversion 
+
+
+colnames(clinical_dataset)
+head(clinical_dataset)
+
+
+
+
+
+
+
+
+summary(clinical_dataset$diagnoses.tumor_of_origin)
+table(clinical_dataset$diagnoses.tumor_of_origin)
+head(clinical_dataset$diagnoses.tumor_of_origin)
+unique((clinical_dataset$diagnoses.tumor_of_origin))
+
+lapply(clinical_dataset, table)
+
+
+all_na_cols <- names(clinical_dataset)[
+  sapply(clinical_dataset, function(x) all(is.na(x)))
+]
+
+all_na_cols
+
+summary(clinical_dataset)
+colnames(clinical_dataset)
+
+
+
+
+write.table(clinical_dataset, "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/my_dataset.csv", sep = ";", row.names = FALSE, quote = FALSE)
+
+unique(clinical_dataset[[32]])
+
+unique(clinical_dataset$diagnoses.sites_of_involvement)
+
+max(nchar(as.character(clinical_dataset[[32]])), na.rm = TRUE)
+
+which.max(nchar(apply(clinical_dataset, 2, function(x) max(nchar(as.character(x)), na.rm = TRUE))))
+
+
+
+```
+
+
+
+
+Exploring the common columns dfs share  and combining all the clinical and biospecimen datasets
+```{r}
+head(clinical_dataset[c("project.project_id", "cases.case_id", "cases.submitter_id")]) # case id seems to be primary key for per patient case
+
+length(unique(clinical_dataset$cases.case_id)) # 1098
+length(unique(familial_dataset$cases.case_id)) # 1096
+length(unique(pathology_dataset$cases.case_id)) # 1096
+length(unique(exposure_dataset$cases.case_id)) # 1
+length(unique(follow_up_dataset$cases.case_id)) # 1096
+length(unique(aliquot_dataset$cases.case_id)) # 1098
+length(unique(analyte_dataset$cases.case_id)) # 1098
+length(unique(portion_dataset$cases.case_id)) # 1098
+length(unique(sample_dataset$cases.case_id)) # 1098
+length(unique(slide_dataset$cases.case_id)) # 1098
+
+# first drop project.project_id and cases.submitter_id from every dataset except clinical_dataset 
+
+familial_dataset = subset(familial_dataset, select = -c(project.project_id, cases.submitter_id))
+pathology_dataset = subset(pathology_dataset, select = -c(project.project_id, cases.submitter_id))
+exposure_dataset = subset(exposure_dataset, select = -c(project.project_id, cases.submitter_id))
+follow_up_dataset = subset(follow_up_dataset, select = -c(project.project_id, cases.submitter_id))
+aliquot_dataset = subset(aliquot_dataset, select = -c(project.project_id, cases.submitter_id))
+analyte_dataset = subset(analyte_dataset, select = -c(project.project_id, cases.submitter_id))
+portion_dataset = subset(portion_dataset, select = -c(project.project_id, cases.submitter_id))
+sample_dataset = subset(sample_dataset, select = -c(project.project_id, cases.submitter_id))
+slide_dataset = subset(slide_dataset, select = -c(project.project_id, cases.submitter_id))
+
+
+# combine all of the df 
+
+df <- clinical_dataset %>%
+  full_join(familial_dataset, by = "cases.case_id") %>%
+  full_join(pathology_dataset, by = "cases.case_id") %>%
+  full_join(exposure_dataset, by = "cases.case_id") %>%
+  full_join(follow_up_dataset, by = "cases.case_id") 
+
+df
+
+```
+
+

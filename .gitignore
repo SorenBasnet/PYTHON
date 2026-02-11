@@ -1,2 +1,6 @@
 STAT_443/data
 STAT_443/data/alzheimers_disease_data.csv
+.Rproj.user
+STAT_443/tcga_brca/data
+STAT_443/tcga_brca/R/.RData
+STAT_443/tcga_brca/R/.Rhistory

@@ -44,12 +44,18 @@ from sklearn.model_selection import train_test_split
 # n_estimators = number of trees in the committee 
 # max_features = 'sqrt' is the standard for feature sampling 
 
-rf = RandomForestClassifier(n_estimators=100, max_features='sqrt', random_state=42)
+rf = RandomForestClassifier(n_estimators=100, 
+                            max_features='sqrt', 
+                            random_state=42)
 
 # load dataset 
 data = load_wine() 
+print(type(data))
 X, y = data.data, data.target
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+print(type(X))
+X_train, X_test, y_train, y_test = train_test_split(X, 
+                                                    y, 
+                                                    random_state=42)
 
 rf.fit(X_train, y_train)
 print(f"Random Forest Accuracy : {rf.score(X_test, y_test):.4f}")
