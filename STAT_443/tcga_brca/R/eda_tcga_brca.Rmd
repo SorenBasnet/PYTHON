@@ -7,6 +7,7 @@ Import required dataset
 ```{r}
 library(readr) # helps with reading tsv files
 library(dplyr)
+library(tidyverse)
 ```
 
 Global variables
@@ -14,18 +15,81 @@ Global variables
 dataset_path <- "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/"
 ```
 
+Import datasets
+```{r}
+clinical_dataset  <- read_csv(file.path(dataset_path,"clinical/my_dataset_modified_2_2.csv"), skip=1, show_col_types = FALSE)
+
+clinical_dataset = subset(clinical_dataset, select = -c(diagnoses.morphology, 
+                                                        diagnoses.days_to_diagnosis, 
+                                                        diagnoses.days_to_last_follow_up,
+                                                        treatments.treatment_outcome, 
+                                                        treatments.treatment_type))
+```
+
+
+Check for treatment 
+```{r}
+ check_treatment <- clinical_dataset %>% 
+  group_by(cases.case_id) %>% 
+  summarise(has_treatment = any(treatments.treatment_or_therapy == "yes")) %>% 
+  ungroup()
+
+unique(check_treatment$has_treatment)
+
+
+
+clinical_dataset_2 <- clinical_dataset %>% filter(!(cases.case_id %in% c("151f3677-6854-4265-9126-d92c646c67ae","389e5b18-8f89-41a9-9fa5-efd4172836e2","3c8b5af9-c34d-43c2-b8c9-39ea11e44fa6","57a1604c-60b7-4b30-a75e-f70939532c5c","9ba11ea8-97d3-464a-90a4-ec1151be9088","e663954c-05a8-479a-a623-400c1eb5efc6","fe2cd610-aa52-4789-ac62-7683281bb22f")))
+
+```
+
+
+Number of unique cases 
+```{r}
+
+length(unique(clinical_dataset_2$cases.case_id))
+length(clinical_dataset_2$cases.case_id)
+
+```
+
+
+
+
+
 Import clinical datasets
 ```{r}
 
-clinical_dataset  <- read_tsv(file.path(dataset_path,"clinical/clinical.tsv"), show_col_types = FALSE)
+clinical_dataset  <- read_csv(file.path(dataset_path,"clinical/my_dataset_modified_2_2.csv"), skip=1, show_col_types = FALSE)
+# drop case id 
+clinical_dataset = subset(clinical_dataset, select = -c(cases.case_id, diagnoses.morphology, diagnoses.days_to_diagnosis, diagnoses.days_to_last_follow_up,treatments.treatment_outcome, treatments.treatment_type))
+
+colnames(clinical_dataset)
+unique(clinical_dataset$cases.disease_type)
+                                                        
 familial_dataset  <- read_tsv(file.path(dataset_path, "clinical/follow_up.tsv"), show_col_types = FALSE)
+colnames(familial_dataset)
+
 pathology_dataset <- read_tsv(file.path(dataset_path, "clinical/pathology_detail.tsv"), show_col_types = FALSE)
 colnames(pathology_dataset)
+
 exposure_dataset  <- read_tsv(file.path(dataset_path, "clinical/exposure.tsv"), show_col_types = FALSE)
 colnames(exposure_dataset)
+
 follow_up_dataset <- read_tsv(file.path(dataset_path, "clinical/follow_up.tsv"), show_col_types = FALSE)
 
+colnames(follow_up_dataset)
+colnames(clinical_dataset) 
+colnames(exposure_dataset)
+colnames(pathology_dataset)
+colnames(familial_dataset)
 ```
+
+```{r}
+unique(clinical_dataset$cases.disease_type)
+clinical_dataset$demographic.age_at_index <- as.numeric(clinical_dataset$demographic.age_at_index)
+summary(clinical_dataset$demographic.age_at_index)
+
+```
+
 
 Import biospecimen datasets 
 ```{r}
@@ -35,6 +99,16 @@ analyte_dataset <- read_tsv(file.path(dataset_path, "biospecimen/analyte.tsv"), 
 portion_dataset <- read_tsv(file.path(dataset_path, "biospecimen/portion.tsv"), show_col_types = FALSE)
 sample_dataset  <- read_tsv(file.path(dataset_path, "biospecimen/sample.tsv"), show_col_types = FALSE)
 slide_dataset   <- read_tsv(file.path(dataset_path, "biospecimen/slide.tsv"), show_col_types = FALSE)
+
+colnames(aliquot_dataset)
+colnames(analyte_dataset)
+
+colnames(portion_dataset)
+
+colnames(sample_dataset)
+
+colnames(slide_dataset)
+
 
 ```
 
@@ -70,18 +144,252 @@ dfColList <- lapply(dfList,names)
 commonCols <- Reduce(intersect,dfColList)
  
 print(commonCols)
+
+colnames(clinical_dataset)
+```
+
+
+```{r}
+
+clinical_dataset[clinical_dataset == "'--"] <- NA
+
+
+clinical_dataset <- clinical_dataset %>%
+  mutate(across(everything(), ~ str_replace_all(.x, " ", "_"))) %>%   # Space to _
+  mutate(across(everything(), ~ str_replace_all(.x, ",", "__"))) %>%      # Comma to __
+ mutate(across(everything(), ~ str_replace_all(.x, "\\(", "__")))  %>%  
+  mutate(across(everything(), ~ str_replace_all(.x, "\\)", "__")))
+ 
+colnames(clinical_dataset) <- sub(".*\\.", "", colnames(clinical_dataset))
+
+
+write.table(clinical_dataset, "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/R/my_dataset_feb_14.txt", sep = " ", row.names = FALSE, quote = FALSE)
+write.table(clinical_dataset, "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/R/my_dataset_feb_14.csv", sep = ",", row.names = FALSE, quote = FALSE)
+
+unique(clinical_dataset$diagnoses.days_to_diagnosis)
+
+summary(clinical_dataset)
+unique(clinical_dataset$diagnoses.primary_diagnosis)
+max(nchar(clinical_dataset$diagnoses.primary_diagnosis))
+any(grepl(" ", clinical_dataset))
+
+clinical_dataset_clean <- clinical_dataset
+
+clinical_dataset_clean[] <- lapply(clinical_dataset_clean, function(x) {
+  if (is.character(x)) {
+    x <- gsub(" ", "_", x)
+  }
+  return(x)
+})
+
+
+for (col in names(clinical_dataset_clean)) {
+  bad <- clinical_dataset_clean[[col]][grepl(" ", clinical_dataset_clean[[col]])]
+  if (length(bad) > 0) {
+    cat("\nColumn:", col, "\n")
+    print(unique(bad)[1:5])
+  }
+}
+```
+
+
+```{r}
+
+
+
+
+unique(clinical_dataset$diagnoses.classification_of_tumor)
+clinical_dataset <- clinical_dataset %>%
+  mutate(diagnoses.classification_of_tumor = case_when(
+    diagnoses.classification_of_tumor == "Synchronous primary" ~ "Synchronous_primary",
+    diagnoses.classification_of_tumor == "Prior primary" ~ "Prior_primary",
+    diagnoses.classification_of_tumor == "Subsequent Primary" ~ "Subsequent_Primary",
+    diagnoses.classification_of_tumor == "not reported" ~ "not_reported",
+    TRUE ~ diagnoses.classification_of_tumor
+  ))
+
+
+
+
+
+clinical_dataset$diagnoses.ajcc_staging_system_edition <- as.factor(clinical_dataset$diagnoses.ajcc_staging_system_edition)
+
+
+unique(clinical_dataset$diagnoses.ajcc_pathologic_t)
+clinical_dataset <- clinical_dataset %>%
+  mutate(diagnoses.ajcc_pathologic_t = case_when(
+    diagnoses.ajcc_pathologic_t == "Tis (DCIS)" ~ "Tis_DCIS",
+    diagnoses.ajcc_pathologic_t == "Tis (LCIS)" ~ "Tis_LCIS",
+    TRUE ~ diagnoses.ajcc_pathologic_t
+  ))
+
+
+
+
+unique(clinical_dataset$diagnoses.ajcc_pathologic_n)
+clinical_dataset <- clinical_dataset %>%
+  mutate(diagnoses.ajcc_pathologic_n = case_when(
+    diagnoses.ajcc_pathologic_n == "N0 (mol+)" ~ "NO_mol_+_",
+    diagnoses.ajcc_pathologic_n == "N0 (i-)" ~ "N0_i-_",
+    diagnoses.ajcc_pathologic_n == "N0 (i+)" ~ "N0_i+_",
+    TRUE ~ diagnoses.ajcc_pathologic_n
+  ))
+
+
+
+
+unique(clinical_dataset$diagnoses.ajcc_pathologic_m)
+clinical_dataset <- clinical_dataset %>%
+  mutate(diagnoses.ajcc_pathologic_m = case_when(
+    diagnoses.ajcc_pathologic_m == "cM0 (i+)" ~ "cMO_i+_",
+    TRUE ~ diagnoses.ajcc_pathologic_m
+  ))
+
+
+
+
+clinical_dataset$diagnoses.age_at_diagnosis <- as.numeric(clinical_dataset$diagnoses.age_at_diagnosis)
+
+clinical_dataset$demographic.age_at_index <- as.numeric(clinical_dataset$demographic.age_at_index)
+
+
+clinical_dataset$demographic.gender <- as.factor(clinical_dataset$demographic.gender)
+
+
+
+unique(clinical_dataset$demographic.race)
+clinical_dataset <- clinical_dataset %>%
+  mutate(demographic.race = case_when(
+    demographic.race == "not reported" ~ "not_reported",
+    demographic.race == "black or african american" ~ "AA",
+    demographic.race == "american indian or alaska native" ~ "AIAN",
+    TRUE ~ demographic.race
+  ))
+
+
+
+clinical_dataset <- clinical_dataset %>%
+  mutate(cases.disease_type = case_when(
+    cases.disease_type == "Adenomas and Adenocarcinomas" ~ "Adenomas_&_Adenocarcinomas",
+    cases.disease_type == "Ductal and Lobular Neoplasms" ~ "Ductal_&_Lobular_Neoplasms",
+    cases.disease_type == "Adnexal and Skin Appendage Neoplasms" ~ "Adnexal_&_Skin_Appendage_Neoplasms",
+    cases.disease_type == "Epithelial Neoplasms, NOS" ~ "Epithelial_Neoplasms__NOS",
+    cases.disease_type == "Complex Epithelial Neoplasms" ~ "Complex_Epithelial_Neoplasms",
+    cases.disease_type == "Fibroepithelial Neoplasms" ~ "Fibroepithelial_Neoplasms",
+    cases.disease_type == "Cystic, Mucinous and Serous Neoplasms" ~ "Cystic__Mucinous_&_Serous_Neoplasms",
+    cases.disease_type == "Squamous Cell Neoplasms" ~ "Squamous_Cell_Neoplasms",
+    cases.disease_type == "Basal Cell Neoplasms" ~ "Basal_Cell_Neoplasms",
+    TRUE ~ cases.disease_type
+  ))
+
+
+unique(clinical_dataset$treatments.treatment_type)
+clinical_dataset <- clinical_dataset %>%
+  mutate(treatments.treatment_type = case_when(
+    treatments.treatment_type == "Radiation Therapy, NOS" ~ "Radiation_Therapy__NOS",
+    treatments.treatment_type == "Hormone Therapy" ~ "Hormone_Therapy",
+    treatments.treatment_type == "Surgery, NOS" ~ "Surgery__NOS",
+    treatments.treatment_type == "Bisphosphonate Therapy" ~ "Bisphosphonate_Therapy",
+    treatments.treatment_type == "Chemotherapy" ~ "Chemotherapy",
+    treatments.treatment_type == "Targeted Molecular Therapy" ~ "Targeted_Molecular_Therapy",
+    treatments.treatment_type == "Pharmaceutical Therapy, NOS" ~ "Pharmaceutical_Therapy__NOS",
+    treatments.treatment_type == "Brachytherapy, High Dose" ~ "Brachytherapy__High_Dose",
+    treatments.treatment_type == "Ancillary Treatment" ~ "Ancillary_Treatment",
+    treatments.treatment_type == "Immunotherapy (Including Vaccines)" ~ "Immunotherapy__Including Vaccines",
+    treatments.treatment_type == "Radiation, Stereotactic/Gamma Knife/SRS" ~ "Radiation__Stereotactic_Gamma Knife__SRS",
+    treatments.treatment_type == "Radiation, Radioisotope" ~ "Radiation__Radioisotope",
+    treatments.treatment_type == "Brachytherapy, NOS" ~ "Brachytherapy__NOS",
+    treatments.treatment_type == "Radiation, Implants" ~ "Radiation__Implants",
+    TRUE ~ treatments.treatment_type
+  ))
+
+unique(clinical_dataset$treatments.treatment_outcome)
+clinical_dataset <- clinical_dataset %>%
+  mutate(treatments.treatment_outcome = case_when(
+    treatments.treatment_outcome == "Treatment Ongoing" ~ "Treatment_Ongoing",
+    treatments.treatment_outcome == "Complete Response" ~ "Complete_Response",
+    treatments.treatment_outcome == "Not Reported" ~ "Not_Reported",
+    treatments.treatment_outcome == "Stable Disease" ~ "Stable_Disease",
+    treatments.treatment_outcome == "Progressive Disease" ~ "Progressive_Disease",
+    treatments.treatment_outcome == "Partial Response" ~ "Partial_Response", 
+    TRUE ~ treatments.treatment_outcome
+  ))
+
+
+unique(clinical_dataset$treatments.treatment_intent_type)
+clinical_dataset <- clinical_dataset %>%
+  mutate(treatments.treatment_intent_type = case_when(
+    treatments.treatment_intent_type == "Re-Excision" ~ "Re_Excision",
+    treatments.treatment_intent_type == "Not Reported" ~ "Not_Reported",
+    treatments.treatment_intent_type == "Maintenance Therapy" ~ "Maintenance_Therapy",
+    treatments.treatment_intent_type == "First-Line Therapy" ~ "First_Line_Therapy",
+
+    TRUE ~ treatments.treatment_intent_type
+  ))
+
+
+unique(clinical_dataset$treatments.treatment_anatomic_sites)
+clinical_dataset <- clinical_dataset %>%
+  mutate(treatments.treatment_anatomic_sites = case_when(
+    treatments.treatment_anatomic_sites == "Primary Tumor Field" ~ "Primary_Tumor_Field",
+    treatments.treatment_anatomic_sites == "Locoregional Site" ~ "Locoregional_Site",
+    treatments.treatment_anatomic_sites == "Regional Site" ~ "Regional_Site",
+    treatments.treatment_anatomic_sites == "Body, total" ~ "Body__total",
+    treatments.treatment_anatomic_sites == "Distant Site" ~ "Distant_Site",
+    treatments.treatment_anatomic_sites == "Lymph Node|Thymus" ~ "Lymph_Node__Thymus",
+    treatments.treatment_anatomic_sites == "Not Reported" ~ "Not_Reported",
+     treatments.treatment_anatomic_sites == "Breast|Lymph Node(s) Axilla" ~ "Breast__Lymph_Nodes_Axilla",
+
+    TRUE ~ treatments.treatment_anatomic_sites
+  ))
+
+
+unique(clinical_dataset$treatments.therapeutic_agents)
+clinical_dataset <- clinical_dataset %>%
+  mutate(treatments.therapeutic_agents = case_when(
+    treatments.therapeutic_agents == "Zoledronic Acid" ~ "Primary_Tumor_Field",
+    treatments.therapeutic_agents == "Doxorubicin Hydrochloride" ~ "Locoregional_Site",
+    treatments.therapeutic_agents == "Nab-paclitaxel" ~ "Regional_Site",
+    treatments.therapeutic_agents == "Clodronate Disodium" ~ "Body__total",
+    treatments.therapeutic_agents == "Leuprolide Acetate" ~ "Distant_Site",
+    treatments.therapeutic_agents == "Clinical Trial" ~ "Lymph_Node__Thymus",
+    treatments.therapeutic_agents == "AE37 Peptide/GM-CSF Vaccine" ~ "Not_Reported",
+     treatments.therapeutic_agents == "Toremifene Citrate" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Goserelin Acetate" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Pamidronic Acid" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Tamoxifen Citrate" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Not Reported" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Nelipepimut-S" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Ibandronate Sodium" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Clodronic Acid" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Palonosetron Hydrochloride" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Clinical Trial Agent" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Gemcitabine Hydrochloride" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Pegylated Liposomal Doxorubicin Hydrochloride" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Taxane Compound" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Vinorelbine Tartrate" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Megestrol Acetate" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Pamidronate Disodium" ~ "Breast__Lymph_Nodes_Axilla",
+     treatments.therapeutic_agents == "Hormone Therapy" ~ "Breast__Lymph_Nodes_Axilla",
+
+    TRUE ~ treatments.therapeutic_agents
+  ))
+
+
+
+
+
 ```
 
 
 Cleaning 
 ```{r}
 
-clinical_dataset  <- read_tsv(file.path(dataset_path,"clinical/clinical.tsv"), show_col_types = FALSE)
-clinical_dataset <- clinical_dataset %>% filter(grepl("United States", demographic.country_of_residence_at_enrollment))
+#clinical_dataset  <- read_tsv(file.path(dataset_path,"clinical/clinical_corrected.tsv"), show_col_types = FALSE)
+#clinical_dataset <- clinical_dataset %>% filter(grepl("United States", demographic.country_of_residence_at_enrollment))
 clinical_dataset[clinical_dataset == "'--"] <- NA
 clinical_dataset$treatments.treatment_type <- factor(clinical_dataset$treatments.treatment_type)
-clinical_dataset$treatments.treatment_outcome <- factor(clinical_dataset$treatments.treatment_outcome)
-clinical_dataset$treatments.treatment_or_therapy <- factor(clinical_dataset$treatments.treatment_or_therapy)
+
 clinical_dataset$treatments.treatment_intent_type <- factor(clinical_dataset$treatments.treatment_intent_type)
 clinical_dataset$treatments.treatment_dose_units <- factor(clinical_dataset$treatments.treatment_dose_units)
 clinical_dataset$treatments.treatment_dose <- as.numeric(clinical_dataset$treatments.treatment_dose)
@@ -90,15 +398,34 @@ clinical_dataset$treatments.therapeutic_agents <- factor(clinical_dataset$treatm
 clinical_dataset$treatments.route_of_administration <- factor(clinical_dataset$treatments.route_of_administration)
 clinical_dataset$treatments.regimen_or_line_of_therapy <- factor(clinical_dataset$treatments.regimen_or_line_of_therapy)
 clinical_dataset$diagnoses.classification_of_tumor <- factor(clinical_dataset$diagnoses.classification_of_tumor)
+
+# this one 
 clinical_dataset$demographic.vital_status <- factor(clinical_dataset$demographic.vital_status)
+clinical_dataset$treatments.treatment_type <- factor(clinical_dataset$treatments.treatment_type)
+clinical_dataset$treatments.treatment_or_therapy <- factor(clinical_dataset$treatments.treatment_or_therapy)
+
+# This one 
 clinical_dataset$demographic.race <- factor(clinical_dataset$demographic.race)
+clinical_dataset$treatments.treatment_outcome <- factor(clinical_dataset$treatments.treatment_outcome)
+
+
 clinical_dataset$treatments.margin_status <- factor(clinical_dataset$treatments.margin_status)
-clinical_dataset$diagnoses.ajcc_pathologic_m <- factor(clinical_dataset$diagnoses.ajcc_pathologic_m)
 clinical_dataset$diagnoses.tissue_or_organ_of_origin <- factor(clinical_dataset$diagnoses.tissue_or_organ_of_origin)
+
+# this one 
 clinical_dataset$demographic.gender <- factor(clinical_dataset$demographic.gender)
+clinical_dataset$diagnoses.ajcc_pathologic_m <- factor(clinical_dataset$diagnoses.ajcc_pathologic_m)
+clinical_dataset$diagnoses.ajcc_pathologic_stage <- factor(clinical_dataset$diagnoses.ajcc_pathologic_stage)
+clinical_dataset$diagnoses.ajcc_pathologic_t <- factor(clinical_dataset$diagnoses.ajcc_pathologic_t)
+
+
 clinical_dataset$diagnoses.diagnosis_is_primary_disease <- factor(clinical_dataset$diagnoses.diagnosis_is_primary_disease)
 clinical_dataset$diagnoses.icd_10_code <- factor(clinical_dataset$diagnoses.icd_10_code)
+
+# this one 
 clinical_dataset$diagnoses.age_at_diagnosis <- as.numeric(clinical_dataset$diagnoses.age_at_diagnosis)
+clinical_dataset$diagnoses.ajcc_staging_system_edition <- factor(clinical_dataset$diagnoses.ajcc_staging_system_edition)
+
 clinical_dataset$diagnoses.method_of_diagnosis <- factor(clinical_dataset$diagnoses.method_of_diagnosis)
 clinical_dataset$diagnoses.metastasis_at_diagnosis <- factor(clinical_dataset$diagnoses.metastasis_at_diagnosis)
 clinical_dataset$cases.disease_type <- factor(clinical_dataset$cases.disease_type)
@@ -108,7 +435,7 @@ clinical_dataset$demographic.age_at_index <- as.numeric(clinical_dataset$demogra
 clinical_dataset$demographic.days_to_birth <- as.numeric(clinical_dataset$demographic.days_to_birth)
 clinical_dataset$demographic.days_to_death <- as.numeric(clinical_dataset$demographic.days_to_death)
 clinical_dataset$diagnoses.ajcc_pathologic_n <- factor(clinical_dataset$diagnoses.ajcc_pathologic_n)
-clinical_dataset$diagnoses.ajcc_pathologic_stage <- factor(clinical_dataset$diagnoses.ajcc_pathologic_stage)
+
 clinical_dataset$diagnoses.ajcc_pathologic_t <- factor(clinical_dataset$diagnoses.ajcc_pathologic_t)
 clinical_dataset$diagnoses.ajcc_staging_system_edition <- factor(clinical_dataset$diagnoses.ajcc_staging_system_edition)
 clinical_dataset$diagnoses.days_to_diagnosis <- as.numeric(clinical_dataset$diagnoses.days_to_diagnosis)
@@ -121,13 +448,33 @@ clinical_dataset$diagnoses.prior_treatment <- factor(clinical_dataset$diagnoses.
 clinical_dataset$diagnoses.sites_of_involvement <- factor(clinical_dataset$diagnoses.sites_of_involvement)
 clinical_dataset$diagnoses.synchronous_malignancy <- factor(clinical_dataset$diagnoses.synchronous_malignancy)
 
+```
 
+## Delete 
+
+```{r}
 
 
 #diagnoses.sites_of_involvement
 
-clinical_dataset = subset(clinical_dataset, select = -c(cases.consent_type, cases.days_to_consent, treatments.treatment_outcome_duration, demographic.age_is_obfuscated, demographic.marital_status, demographic.occupation_duration_years, demographic.population_group, demographic.premature_at_birth, diagnoses.adrenal_hormone, demographic.year_of_death, demographic.year_of_birth, demographic.weeks_gestation_at_birth, cases.days_to_lost_to_followup                    , demographic.cause_of_death                       , demographic.cause_of_death_source,                     
-demographic.country_of_birth                      , demographic.education_level                      , diagnoses.ajcc_clinical_m         ,         
+clinical_dataset = subset(clinical_dataset, select = -c(cases.consent_type, 
+                                                        cases.days_to_consent, 
+                                                        treatments.treatment_outcome_duration, 
+                                                        demographic.age_is_obfuscated, 
+                                                        demographic.marital_status, 
+                                                        demographic.occupation_duration_years, 
+                                                        demographic.population_group, 
+                                                        demographic.premature_at_birth, 
+                                                        diagnoses.adrenal_hormone, 
+                                                        demographic.year_of_death, 
+                                                        demographic.year_of_birth, 
+                                                        demographic.weeks_gestation_at_birth, 
+                                                        cases.days_to_lost_to_followup, 
+                                                        demographic.cause_of_death, 
+                                                        demographic.cause_of_death_source,                     
+                                                        demographic.country_of_birth, 
+                                                        demographic.education_level, 
+                                                        diagnoses.ajcc_clinical_m,         
 diagnoses.ajcc_clinical_n                         , diagnoses.ajcc_clinical_stage                    , diagnoses.ajcc_clinical_t          ,               
 diagnoses.ajcc_serum_tumor_markers                , diagnoses.ann_arbor_b_symptoms                   , diagnoses.ann_arbor_b_symptoms_described,
 diagnoses.ann_arbor_clinical_stage                , diagnoses.ann_arbor_extranodal_involvement       , diagnoses.ann_arbor_pathologic_stage,
@@ -171,10 +518,9 @@ treatments.therapeutic_levels_achieved            , treatments.therapeutic_targe
 treatments.treatment_anatomic_site                , treatments.treatment_arm                          , treatments.treatment_dose_max,
 treatments.treatment_duration                     , treatments.treatment_effect                       , treatments.treatment_effect_indicator,
 treatments.treatment_frequency, treatments.treatment_id, treatments.submitter_id, demographic.submitter_id, demographic.country_of_residence_at_enrollment, diagnoses.diagnosis_id, 
-demographic.ethnicity, demographic.demographic_id, diagnoses.submitter_id, project.project_id, cases.index_date, cases.submitter_id, treatments.number_of_cycles, diagnoses.sites_of_involvement))
+demographic.ethnicity, demographic.demographic_id, diagnoses.submitter_id, project.project_id, cases.index_date, cases.submitter_id, treatments.number_of_cycles, cases.lost_to_followup, demographic.days_to_birth, demographic.days_to_death))
 
-# include diagnoses.sites_of_involvement later 
-
+# add cases.lost_to_followup, demographic.days_to_birth, demographic.days_to_death later pelase
 
 # demographic.marital_status, demographic.weeks_gestation_at_birth, demographic.year_of_birth, demographic.year_of_death, diagnoses.adrenal_hormone
 # demographic.premature_at_birth - contains no information - NA 
@@ -190,14 +536,31 @@ demographic.ethnicity, demographic.demographic_id, diagnoses.submitter_id, proje
 # treatments.treatment_dose_units might need some conversion 
 
 
+```
+
+
+```{r}
+
 colnames(clinical_dataset)
 head(clinical_dataset)
 
+write.table(clinical_dataset, "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/my_dataset.csv", sep = ";", row.names = FALSE, quote = FALSE)
+
+```
 
 
 
+Check every column with comma and change it
+```{r}
 
 
+clinical_dataset$cases.disease_type[clinical_dataset$cases.disease_type == "Adenomas and Adenocarcinomas"] <- "Adenomas_&_Adenocarcinomas"
+
+```
+
+
+
+```{r}
 
 
 summary(clinical_dataset$diagnoses.tumor_of_origin)
@@ -220,9 +583,9 @@ colnames(clinical_dataset)
 
 
 
-write.table(clinical_dataset, "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/my_dataset.csv", sep = ";", row.names = FALSE, quote = FALSE)
+write.table(clinical_dataset, "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/my_dataset_modified.csv", sep = ";", row.names = FALSE, quote = FALSE)
 
-unique(clinical_dataset[[32]])
+unique(clinical_dataset[[8]])
 
 unique(clinical_dataset$diagnoses.sites_of_involvement)
 
@@ -276,5 +639,18 @@ df <- clinical_dataset %>%
 df
 
 ```
+
+
+
+```{r}
+lines <- readLines("/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/R/my_dataset_feb_14.csv")
+cat(clinical_dataset[13])
+
+
+
+```
+
+
+
 
 

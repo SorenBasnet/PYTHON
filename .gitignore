@@ -4,3 +4,6 @@ STAT_443/data/alzheimers_disease_data.csv
 STAT_443/tcga_brca/data
 STAT_443/tcga_brca/R/.RData
 STAT_443/tcga_brca/R/.Rhistory
+STAT_443/tcga_brca/R/my_dataset_feb_14.*
+STAT_443/cll_driver_outcome/data/cll_broad_2022/
+STAT_443/cll_driver_outcome/data/data_clinical_patient_feb21.txt

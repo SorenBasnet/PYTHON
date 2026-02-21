@@ -1,0 +1,414 @@
+             GGG   U   U  I  DDDD   EEEE
+            G   G  U   U  I  D   D  E
+            G      U   U  I  D   D  E
+            G  GG  U   U  I  D   D  EEE
+            G   G  U   U  I  D   D  E
+            G   G  U   U  I  D   D  E
+             GGG    UUU   I  DDDD   EEEE
+   
+ GUIDE Classification and Regression Trees and Forests
+ Version 46.2 (Build date: February 9, 2026)       
+ Compiled with NAG Fortran 7.2 on macOS Sequoia 15.6.1 for Apple ARM processors  
+ Copyright (c) 1997-2023 Wei-Yin Loh. All rights reserved.
+ This software is based upon work partially supported by the U.S. Army Research Office,
+ National Science Foundation, National Institutes of Health,
+ Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
+  
+ This job was started on 02/21/26 at 16:49
+  
+ Classification tree
+ Pruning by cross-validation
+ DSC file: dsc_feb21.txt
+ Training sample file: data_clinical_patient_feb21.txt
+ Missing value code: NA
+ Records in data file start on line 2
+ 6 N variables changed to S
+ D variable is EXPRESSION_CLUSTER
+ Number of records in data file: 1148
+ Length of longest entry in data file: 16
+ Missing values found in D variable
+ Missing values found among categorical variables
+ Separate categories will be created for missing categorical variables
+ Missing values found among non-categorical variables
+ Number of classes: 10
+ Training sample class proportions of D variable EXPRESSION_CLUSTER:
+ Class  #Cases     Proportion
+ 0         442     0.43805748
+ 2258        1     0.00099108
+ EC-m2      45     0.04459861
+ EC_I       59     0.05847374
+ EC_M1      49     0.04856293
+ EC_M3      53     0.05252725
+ EC_M4     109     0.10802775
+ EC_O       20     0.01982161
+ EC_U1     171     0.16947473
+ EC_U2      60     0.05946482
+  
+ Summary information for training sample of size 1009 (excluding observations
+  with non-positive weight or missing values in d, e, t, r or z variables)
+ d=dependent, b=split and fit cat variable using indicator variables,
+ c=split-only categorical, i=fit-only categorical (via indicators),
+ s=split-only numerical, n=split and fit numerical, f=fit-only numerical,
+ m=missing-value flag variable, p=periodic variable, w=weight
+                                                                 #Codes/           
+                                                                 Levels/           
+  Column  Name                           Minimum      Maximum    Periods   #Missing
+       2  AGE                       s    18.00        93.00                    50
+       3  AGE_SAMPLING              s    19.00        94.00    
+       4  SEX                       c                                  2
+       5  OS_STATUS                 c                                  2
+       6  OS_MONTHS                 s    0.000        284.3    
+       7  DEATH_DAYS                s    0.000        5723.    
+       8  IGHV_MUTATION_STATUS      c                                  2       15
+       9  IGHV_IDENTITY_PERCENTAGE  s    84.72        100.0                    18
+      10  TREATMENT_STATUS          c                                  2
+      11  PRIOR_TREATMENT_CATEGORY  c                                  6
+      12  TREATMENT_AFTER_SAMPLING  c                                 19      612
+      13  EXPRESSION_CLUSTER        d                                 10
+      14  FFS_STATUS                c                                  2
+      15  FFS_MONTHS                s    0.000        220.3    
+  
+ Numbers of N, F, S, and P below exclude constant variables
+      Total  #cases w/   #missing
+     #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
+       1148        139        204        1        0        0        6
+     #P-var   #M-var   #B-var   #C-var   #I-var
+          0        0        0        7        0
+ Number of cases used for training: 1009
+ Number of cases excluded due to 0 W or missing D variable: 139
+  
+ Pruning by v-fold cross-validation, with v = 10
+ Selected tree is based on mean of CV estimates
+ Number of SE's for pruned tree: 0.2500
+  
+ Simple node models
+ Estimated priors
+ Unit misclassification costs
+ Univariate split highest priority
+ Interaction and linear splits 2nd and 3rd priorities
+ Split values for N and S variables based on exhaustive search
+ Max number of interaction splits: 100
+ Maximum number of split levels: 15
+ Minimum node sample size: 2
+ Ranks of variables and their 1-df chi-squared values at root node
+      1  0.2254E+03   IGHV_MUTATION_STATUS
+      2  0.1579E+03   IGHV_IDENTITY_PERCENTAGE
+      3  0.8067E+02   TREATMENT_STATUS
+      4  0.7455E+02   FFS_STATUS
+      5  0.5863E+02   FFS_MONTHS
+      6  0.4617E+02   PRIOR_TREATMENT_CATEGORY
+      7  0.3331E+02   DEATH_DAYS
+      8  0.3331E+02   OS_STATUS
+      9  0.1428E+02   OS_MONTHS
+     10  0.1021E+02   AGE
+     11  0.2701E+01   SEX
+     12  0.2410E+01   AGE_SAMPLING
+     13  0.1140E+01   TREATMENT_AFTER_SAMPLING
+
+ Size and CV mean cost and SE of subtrees:
+  Tree   #Tnodes  Mean Cost   SE(Mean)   BSE(Mean)  Median Cost  BSE(Median)
+    1      195   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+    2      194   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+    3      193   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+    4      192   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+    5      191   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+    6      189   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+    7      188   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+    8      187   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+    9      184   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+   10      182   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+   11      180   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+   12      178   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+   13      176   6.412E-01   1.510E-02   9.204E-03   6.418E-01   1.026E-02
+   14      174   6.363E-01   1.514E-02   9.597E-03   6.337E-01   9.104E-03
+   15      171   6.353E-01   1.515E-02   9.647E-03   6.287E-01   9.879E-03
+   16      168   6.353E-01   1.515E-02   9.647E-03   6.287E-01   9.879E-03
+   17      165   6.353E-01   1.515E-02   9.647E-03   6.287E-01   9.879E-03
+   18      162   6.353E-01   1.515E-02   9.647E-03   6.287E-01   9.879E-03
+   19      158   6.353E-01   1.515E-02   9.647E-03   6.287E-01   9.879E-03
+   20      154   6.363E-01   1.514E-02   9.541E-03   6.337E-01   9.047E-03
+   21      153   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   22      152   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   23      151   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   24      150   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   25      148   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   26      146   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   27      141   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   28      140   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   29      139   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   30      138   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   31      137   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   32      136   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   33      132   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   34      131   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   35      127   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   36      122   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   37      117   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   38      115   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   39      114   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   40      113   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   41      112   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   42      110   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   43      108   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   44      106   6.373E-01   1.514E-02   9.125E-03   6.337E-01   8.616E-03
+   45      104   6.234E-01   1.525E-02   1.154E-02   6.139E-01   1.260E-02
+   46      101   6.234E-01   1.525E-02   1.133E-02   6.139E-01   1.022E-02
+   47       98   6.224E-01   1.526E-02   1.128E-02   6.139E-01   8.979E-03
+   48       91   6.224E-01   1.526E-02   1.128E-02   6.139E-01   8.979E-03
+   49       89   6.214E-01   1.527E-02   1.096E-02   6.139E-01   8.252E-03
+   50       87   6.214E-01   1.527E-02   1.096E-02   6.139E-01   8.252E-03
+   51       85   6.214E-01   1.527E-02   1.096E-02   6.139E-01   8.252E-03
+   52       83   6.234E-01   1.525E-02   1.147E-02   6.188E-01   1.144E-02
+   53       77   6.155E-01   1.532E-02   1.358E-02   6.089E-01   1.713E-02
+   54       74   6.155E-01   1.532E-02   1.358E-02   6.089E-01   1.713E-02
+   55       64   6.184E-01   1.529E-02   1.334E-02   6.139E-01   1.781E-02
+   56       57   6.165E-01   1.531E-02   1.352E-02   6.139E-01   1.697E-02
+   57       45   6.115E-01   1.534E-02   1.557E-02   6.139E-01   1.788E-02
+   58       44   6.115E-01   1.534E-02   1.557E-02   6.139E-01   1.788E-02
+   59       42   6.115E-01   1.534E-02   1.557E-02   6.139E-01   1.788E-02
+   60       39   6.115E-01   1.534E-02   1.557E-02   6.139E-01   1.788E-02
+   61       38   6.115E-01   1.534E-02   1.557E-02   6.139E-01   1.788E-02
+   62       35   6.125E-01   1.534E-02   1.580E-02   6.139E-01   1.897E-02
+   63       34   6.125E-01   1.534E-02   1.580E-02   6.139E-01   1.897E-02
+   64       33   6.065E-01   1.538E-02   1.389E-02   6.139E-01   1.919E-02
+   65       22   5.689E-01   1.559E-02   1.245E-02   5.671E-01   2.031E-02
+   66       20   5.629E-01   1.562E-02   1.295E-02   5.522E-01   1.718E-02
+   67       19   5.629E-01   1.562E-02   1.295E-02   5.522E-01   1.718E-02
+   68       15   5.629E-01   1.562E-02   1.295E-02   5.522E-01   1.718E-02
+   69+      14   5.619E-01   1.562E-02   1.299E-02   5.473E-01   1.724E-02
+   70       12   5.580E-01   1.563E-02   1.340E-02   5.622E-01   1.454E-02
+   71**      5   5.530E-01   1.565E-02   1.384E-02   5.495E-01   1.653E-02
+   72        1   5.619E-01   1.562E-02   3.484E-03   5.644E-01   6.098E-03
+  
+ 0-SE tree based on mean is marked with * and has 5 terminal nodes
+ 0-SE tree based on median is marked with + and has 14 terminal nodes
+ Selected-SE tree based on mean using naive SE is marked with **
+ Selected-SE tree based on mean using bootstrap SE is marked with --
+ Selected-SE tree based on median and bootstrap SE is marked with ++
+ ** tree same as ++ tree
+ ** tree same as -- tree
+ ++ tree same as -- tree
+ * tree same as ** tree
+ * tree same as ++ tree
+ * tree same as -- tree
+  
+ Following tree is based on mean CV with naive SE estimate (**)
+  
+ Structure of final tree. Each terminal node is marked with a T.
+  
+ Node cost is node misclassification cost divided by number of cases in node
+        Node    Total    Train    Predicted        Node    Split          Interacting
+       label    cases    cases    class            cost    variables      variable
+           1     1009     1009    0              4.939E-01 IGHV_MUTATION_STATUS 
+           2T     518      518    0              5.158E-01 IGHV_IDENTITY_PERCENTAGE 
+           3      491      491    0              4.708E-01 TREATMENT_STATUS 
+           6T      71       71    0              0.000E+00 - 
+           7      420      420    EC_U1          5.462E-01 IGHV_IDENTITY_PERCENTAGE :DEATH_DAYS
+          14T      54       54    0              4.720E-01 AGE_SAMPLING +FFS_MONTHS
+          15      366      366    EC_U1          5.043E-01 FFS_MONTHS 
+          30T     319      319    EC_U1          4.794E-01 IGHV_IDENTITY_PERCENTAGE :DEATH_DAYS
+          31T      47       47    0              4.302E-01 IGHV_IDENTITY_PERCENTAGE 
+  
+ Number of terminal nodes of final tree: 5
+ Total number of nodes of final tree: 9
+ Second best split variable (based on curvature test) at root node is IGHV_IDENTITY_PERCENTAGE
+  
+ Classification tree:
+ For categorical variable splits, values not in training data go to the right
+  
+ Node 1: IGHV_MUTATION_STATUS = "MUTATED"
+   Node 2: 0
+ Node 1: IGHV_MUTATION_STATUS /= "MUTATED"
+   Node 3: TREATMENT_STATUS = "POST_T"
+     Node 6: 0
+   Node 3: TREATMENT_STATUS /= "POST_T"
+     Node 7: IGHV_IDENTITY_PERCENTAGE <= 99.610000
+       Node 14: 0
+     Node 7: IGHV_IDENTITY_PERCENTAGE > 99.610000 or NA
+       Node 15: FFS_MONTHS <= 75.220000
+         Node 30: EC_U1
+       Node 15: FFS_MONTHS > 75.220000 or NA
+         Node 31: 0
+ 
+ ***************************************************************
+ Predictor means below are means of cases with no missing values.
+  
+Node 1: Intermediate node
+ A case goes into Node 2 if IGHV_MUTATION_STATUS = "MUTATED"
+ IGHV_MUTATION_STATUS mode = "MUTATED"
+ Class      Number   Posterior
+ 0             442  0.4381E+00
+ 2258            1  0.9911E-03
+ EC-m2          45  0.4460E-01
+ EC_I           59  0.5847E-01
+ EC_M1          49  0.4856E-01
+ EC_M3          53  0.5253E-01
+ EC_M4         109  0.1080E+00
+ EC_O           20  0.1982E-01
+ EC_U1         171  0.1695E+00
+ EC_U2          60  0.5946E-01
+ Number of training cases misclassified = 567
+ Predicted class is 0
+ ----------------------------
+Node 2: Terminal node
+ Class      Number   Posterior
+ 0             214  0.4132E+00
+ 2258            0  0.9813E-06
+ EC-m2          40  0.7719E-01
+ EC_I           37  0.7142E-01
+ EC_M1          45  0.8683E-01
+ EC_M3          48  0.9262E-01
+ EC_M4          98  0.1891E+00
+ EC_O           16  0.3088E-01
+ EC_U1          12  0.2331E-01
+ EC_U2           8  0.1549E-01
+ Number of training cases misclassified = 304
+ Predicted class is 0
+ ----------------------------
+Node 3: Intermediate node
+ A case goes into Node 6 if TREATMENT_STATUS = "POST_T"
+ TREATMENT_STATUS mode = "PRE_T"
+ Class      Number   Posterior
+ 0             228  0.4644E+00
+ 2258            1  0.2037E-02
+ EC-m2           5  0.1018E-01
+ EC_I           22  0.4481E-01
+ EC_M1           4  0.8147E-02
+ EC_M3           5  0.1018E-01
+ EC_M4          11  0.2240E-01
+ EC_O            4  0.8147E-02
+ EC_U1         159  0.3238E+00
+ EC_U2          52  0.1059E+00
+ Number of training cases misclassified = 263
+ Predicted class is 0
+ ----------------------------
+Node 6: Terminal node
+ Class      Number   Posterior
+ 0              71  0.9994E+00
+ 2258            0  0.9813E-06
+ EC-m2           0  0.4416E-04
+ EC_I            0  0.5789E-04
+ EC_M1           0  0.4808E-04
+ EC_M3           0  0.5201E-04
+ EC_M4           0  0.1070E-03
+ EC_O            0  0.1963E-04
+ EC_U1           0  0.1678E-03
+ EC_U2           0  0.5888E-04
+ Number of training cases misclassified = 0
+ Predicted class is 0
+ ----------------------------
+Node 7: Intermediate node
+ A case goes into Node 14 if IGHV_IDENTITY_PERCENTAGE <= 99.610000
+ IGHV_IDENTITY_PERCENTAGE mean = 99.817789
+ Class      Number   Posterior
+ 0             157  0.3738E+00
+ 2258            1  0.2381E-02
+ EC-m2           5  0.1190E-01
+ EC_I           22  0.5238E-01
+ EC_M1           4  0.9524E-02
+ EC_M3           5  0.1190E-01
+ EC_M4          11  0.2619E-01
+ EC_O            4  0.9524E-02
+ EC_U1         159  0.3786E+00
+ EC_U2          52  0.1238E+00
+ Number of training cases misclassified = 261
+ Predicted class is EC_U1
+ ----------------------------
+Node 14: Terminal node
+ Class      Number   Posterior
+ 0              25  0.4629E+00
+ 2258            0  0.9813E-06
+ EC-m2           1  0.1854E-01
+ EC_I           17  0.3146E+00
+ EC_M1           1  0.1855E-01
+ EC_M3           1  0.1855E-01
+ EC_M4           2  0.3711E-01
+ EC_O            3  0.5552E-01
+ EC_U1           3  0.5567E-01
+ EC_U2           1  0.1856E-01
+ Number of training cases misclassified = 29
+ Predicted class is 0
+ ----------------------------
+Node 15: Intermediate node
+ A case goes into Node 30 if FFS_MONTHS <= 75.220000
+ FFS_MONTHS mean = 38.404481
+ Class      Number   Posterior
+ 0             132  0.3607E+00
+ 2258            1  0.2732E-02
+ EC-m2           4  0.1093E-01
+ EC_I            5  0.1366E-01
+ EC_M1           3  0.8197E-02
+ EC_M3           4  0.1093E-01
+ EC_M4           9  0.2459E-01
+ EC_O            1  0.2732E-02
+ EC_U1         156  0.4262E+00
+ EC_U2          51  0.1393E+00
+ Number of training cases misclassified = 210
+ Predicted class is EC_U1
+ ----------------------------
+Node 30: Terminal node
+ Class      Number   Posterior
+ 0             108  0.3386E+00
+ 2258            1  0.3135E-02
+ EC-m2           2  0.6270E-02
+ EC_I            5  0.1567E-01
+ EC_M1           3  0.9404E-02
+ EC_M3           4  0.1254E-01
+ EC_M4           6  0.1881E-01
+ EC_O            1  0.3135E-02
+ EC_U1         145  0.4545E+00
+ EC_U2          44  0.1379E+00
+ Number of training cases misclassified = 174
+ Predicted class is EC_U1
+ ----------------------------
+Node 31: Terminal node
+ Class      Number   Posterior
+ 0              24  0.5106E+00
+ 2258            0  0.9813E-06
+ EC-m2           2  0.4256E-01
+ EC_I            0  0.5789E-04
+ EC_M1           0  0.4808E-04
+ EC_M3           0  0.5201E-04
+ EC_M4           3  0.6387E-01
+ EC_O            0  0.1963E-04
+ EC_U1          11  0.2340E+00
+ EC_U2           7  0.1488E+00
+ Number of training cases misclassified = 23
+ Predicted class is 0
+ ----------------------------
+ 
+ Classification matrix for training sample:
+ Predicted      True class
+ class              0      2258     EC-m2      EC_I     EC_M1     EC_M3
+ 0                334         0        43        54        46        49
+ 2258               0         0         0         0         0         0
+ EC-m2              0         0         0         0         0         0
+ EC_I               0         0         0         0         0         0
+ EC_M1              0         0         0         0         0         0
+ EC_M3              0         0         0         0         0         0
+ EC_M4              0         0         0         0         0         0
+ EC_O               0         0         0         0         0         0
+ EC_U1            108         1         2         5         3         4
+ EC_U2              0         0         0         0         0         0
+ Total            442         1        45        59        49        53
+ 
+               EC_M4      EC_O     EC_U1     EC_U2
+ 0                103        19        26        16
+ 2258               0         0         0         0
+ EC-m2              0         0         0         0
+ EC_I               0         0         0         0
+ EC_M1              0         0         0         0
+ EC_M3              0         0         0         0
+ EC_M4              0         0         0         0
+ EC_O               0         0         0         0
+ EC_U1              6         1       145        44
+ EC_U2              0         0         0         0
+ Total            109        20       171        60
+ 
+ Number of cases used for tree construction: 1009
+ Number misclassified: 530
+ Resubstitution estimate of mean misclassification cost: 0.52527255
+ 
+ Observed and fitted values are stored in fit_simple.txt
+ LaTeX code for tree is in tree_simple.tex
+ Elapsed time in seconds: 0.55073

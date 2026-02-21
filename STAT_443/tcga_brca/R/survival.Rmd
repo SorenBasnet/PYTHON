@@ -1,0 +1,69 @@
+---
+title: "survival"
+output: html_document
+---
+
+```{r}
+library(survival)
+library(survminer)
+```
+
+```{r}
+dataset_path <- "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/tcga_brca/data/"
+```
+
+Import datasets
+```{r}
+clinical_dataset  <- read_csv(file.path(dataset_path,"clinical/my_dataset_modified_2_2.csv"), skip=1, show_col_types = FALSE)
+
+```
+
+```{r}
+unique(clinical_dataset$demographic.vital_status)
+
+clinical_dataset[clinical_dataset == "'--"] <- NA
+
+
+clinical_dataset <- clinical_dataset %>% filter(!(is.na(clinical_dataset$demographic.vital_status)))
+
+
+clinical_dataset$status <- ifelse(clinical_dataset$demographic.vital_status == "Dead", 1, 0)
+
+```
+
+
+
+```{r}
+
+surv_obj <- Surv(time = as.numeric(clinical_dataset$diagnoses.days_to_last_follow_up), event=clinical_dataset$status)
+
+
+```
+
+
+```{r}
+
+fit <- survfit(surv_obj ~ demographic.gender, data = clinical_dataset)
+
+fit
+```
+
+
+```{r}
+
+ggsurvplot(fit, 
+           data = clinical_dataset, 
+           risk.table = FALSE,  
+           pval = TRUE, 
+           conf.int = TRUE, 
+           palette = "Dark2", 
+           title = "Overall Survival by Gender", 
+           xlab = "Time (Days)", 
+           ylab = "Survival Probability")
+```
+
+
+
+
+
+

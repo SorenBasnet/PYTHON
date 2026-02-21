@@ -1,0 +1,73 @@
+ \documentclass[12pt]{article}
+ % LaTeX file created by GUIDE version 46.2 on 02/21/26 at 16:49
+ %%%% Usage: latex tree_simple.tex, dvips tree_simple.tex, ps2pdf tree_simple.tex
+ %%%% or: xelatex tree_simple.tex
+ \usepackage{pstricks}
+ %%%% If using pdflatex, replace above line with \usepackage[pdf]{pstricks}
+ %%%% and use: pdflatex -shell-escape tree_simple.tex
+ \usepackage{pstricks,pst-node,pst-tree}
+ \usepackage{geometry}
+ \usepackage{xcolor}
+ \usepackage{lscape}
+ \definecolor{wheat}{rgb}{0.96, 0.87, 0.7}
+ \definecolor{lightgray}{rgb}{0.9, 0.9, 0.9}
+ \definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+ \definecolor{mauve}{rgb}{0.88, 0.69, 1.0}
+ \definecolor{skyblue}{RGB}{86,180,233}
+ \definecolor{vermillion}{RGB}{213,94,0}
+ \definecolor{purple}{RGB}{204,121,167}
+ \definecolor{bluishgreen}{RGB}{0,158,115}
+ \pagestyle{empty}
+ \begin{document}
+ %\begin{landscape}
+ \begin{center}
+\psset{linecolor=black,tnsep=1pt,tndepth=0cm,tnheight=0cm,treesep=1.5cm,levelsep=50pt,radius=10pt,fillstyle=solid}
+  \pstree[treemode=D]{\Tcircle{ 1 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V1}}\\=\texttt{\detokenize{MUTATED}}}}
+    ~{\em 1009}}{
+ \Tcircle[fillcolor=red]{ 2 }
+    ~[tnpos=l]{0.41}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{0}}}\\\emph{518}}}
+  \pstree[treemode=D]{\Tcircle{ 3 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V2}}\\=\texttt{\detokenize{POST_T}}}}
+ }{
+ \Tcircle[fillcolor=red]{ 6 }
+    ~[tnpos=l]{1.00}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{0}}}\\\emph{71}}}
+  \pstree[treemode=D]{\Tcircle[linecolor=brown]{ 7 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V3}}\\$\leq$\texttt{99.61}}}
+ }{
+ \Tcircle[fillcolor=red]{\small 14}
+    ~[tnpos=l]{0.46}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{0}}}\\\emph{54}}}
+  \pstree[treemode=D]{\Tcircle[linecolor=gray]{\small 15}~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{FFS_MONTHS}}\\$\leq$\texttt{75.22}}}
+ }{
+ \Tcircle[fillcolor=teal]{\small 30}
+    ~[tnpos=l]{0.45}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{EC_U1}}}\\\emph{319}}}
+ \Tcircle[fillcolor=red]{\small 31}
+    ~[tnpos=r]{0.51}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{0}}}\\\emph{47}}}
+ }
+ }
+ }
+ }
+ \end{center}
+GUIDE v.46.2 0.250-SE
+classification tree for predicting \texttt{\detokenize{EXPRESSION_CLUSTER}} using
+estimated priors
+and unit misclassification costs.
+ % Tree constructed from 1009 observations
+ % (excluding observations with non-positive weight or missing values
+ % in \texttt{D}, \texttt{T}, \texttt{R} or \texttt{Z} variables)
+ % and pruned from a tree with 196 terminal nodes.
+ % Maximum number of split levels is 15 and minimum node sample size is 2.
+At each split, an observation goes to the left branch 
+ if and only if the condition is satisfied.
+\texttt{\detokenize{V1}} = \texttt{\detokenize{IGHV_MUTATION_STATUS}}.
+\texttt{\detokenize{V2}} = \texttt{\detokenize{TREATMENT_STATUS}}.
+\texttt{\detokenize{V3}} = \texttt{\detokenize{IGHV_IDENTITY_PERCENTAGE}}.
+ Splits at nodes drawn with \textbf{\textcolor{gray}{gray}} circles are not statistically significant.
+ Splits at nodes drawn with \textbf{\textcolor{brown}{brown}} circles are interaction splits.
+ Predicted class and total sample size (in \emph{italics}) printed below each terminal node;
+ highest class posterior probability beside node.
+ Second best split variable at root node is \texttt{\detokenize{IGHV_IDENTITY_PERCENTAGE}}.
+ %\end{landscape}
+ \end{document}

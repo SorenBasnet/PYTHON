@@ -1,0 +1,56 @@
+ \documentclass[12pt]{article}
+ % LaTeX file created by GUIDE version 46.2 on 02/21/26 at 15:54
+ %%%% Usage: latex tree.tex, dvips tree.tex, ps2pdf tree.tex
+ %%%% or: xelatex tree.tex
+ \usepackage{pstricks}
+ %%%% If using pdflatex, replace above line with \usepackage[pdf]{pstricks}
+ %%%% and use: pdflatex -shell-escape tree.tex
+ \usepackage{pstricks,pst-node,pst-tree}
+ \usepackage{geometry}
+ \usepackage{xcolor}
+ \usepackage{lscape}
+ \definecolor{wheat}{rgb}{0.96, 0.87, 0.7}
+ \definecolor{lightgray}{rgb}{0.9, 0.9, 0.9}
+ \definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+ \definecolor{mauve}{rgb}{0.88, 0.69, 1.0}
+ \definecolor{skyblue}{RGB}{86,180,233}
+ \definecolor{vermillion}{RGB}{213,94,0}
+ \definecolor{purple}{RGB}{204,121,167}
+ \definecolor{bluishgreen}{RGB}{0,158,115}
+ \pagestyle{empty}
+ \begin{document}
+ %\begin{landscape}
+ \begin{center}
+\psset{linecolor=black,tnsep=1pt,tndepth=0cm,tnheight=0cm,treesep=1.5cm,levelsep=55pt,radius=10pt,fillstyle=solid}
+  \pstree[treemode=D]{\Tcircle{ 1 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V1}}\\=\texttt{\detokenize{MUTATED}}}}
+ }{
+  \pstree[treemode=D]{\Tcircle{ 2 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V2}}\\=\texttt{\detokenize{POST_T}}}}
+ }{
+    \Tcircle[fillcolor=skyblue]{ 4 }~{\shortstack[c]{\emph{18}\\0}}  
+    \Tcircle[fillcolor=yellow]{ 5 }~{\shortstack[c]{\emph{500}\\3.47}}  
+   }
+  \pstree[treemode=D]{\Tcircle{ 3 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V3}}\\=\texttt{\detokenize{POST_T}}}}
+ }{
+    \Tcircle[fillcolor=skyblue]{ 6 }~{\shortstack[c]{\emph{71}\\0}}  
+    \Tcircle[fillcolor=skyblue]{ 7 }~{\shortstack[c]{\emph{420}\\1.86}}  
+ }
+ }
+ \end{center}
+GUIDE v.46.2 0.250-SE
+piecewise-constant least-squares regression tree
+for predicting \texttt{\detokenize{EXPRESSION_CLUSTER}}.
+ % Tree constructed from 1009 observations
+ % (excluding observations with non-positive weight or missing values
+ % in \texttt{D}, \texttt{T}, \texttt{R} or \texttt{Z} variables)
+ % and pruned from a tree with 318 terminal nodes.
+ % Maximum number of split levels is 15 and minimum node sample size is 2.
+At each split, an observation goes to the left branch 
+ if and only if the condition is satisfied.
+\texttt{\detokenize{V1}} = \texttt{\detokenize{IGHV_MUTATION_STATUS}}.
+\texttt{\detokenize{V2}} = \texttt{\detokenize{TREATMENT_STATUS}}.
+\texttt{\detokenize{V3}} = \texttt{\detokenize{TREATMENT_STATUS}}.
+Sample size (in \emph{italics}) and mean of \texttt{\detokenize{EXPRESSION_CLUSTER}} printed below nodes.
+ Terminal nodes with means above and below value of  2.49 at root node are painted \colorbox{yellow}{yellow} and \colorbox{skyblue}{skyblue} respectively.
+ Second best split variable at root node is \texttt{\detokenize{IGHV_IDENTITY_PERCENTAGE}}.
+ %\end{landscape}
+ \end{document}

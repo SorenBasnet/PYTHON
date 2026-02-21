@@ -1,0 +1,1276 @@
+             GGG   U   U  I  DDDD   EEEE
+            G   G  U   U  I  D   D  E
+            G      U   U  I  D   D  E
+            G  GG  U   U  I  D   D  EEE
+            G   G  U   U  I  D   D  E
+            G   G  U   U  I  D   D  E
+             GGG    UUU   I  DDDD   EEEE
+   
+ GUIDE Classification and Regression Trees and Forests
+ Version 46.2 (Build date: February 9, 2026)       
+ Compiled with NAG Fortran 7.2 on macOS Sequoia 15.6.1 for Apple ARM processors  
+ Copyright (c) 1997-2023 Wei-Yin Loh. All rights reserved.
+ This software is based upon work partially supported by the U.S. Army Research Office,
+ National Science Foundation, National Institutes of Health,
+ Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
+  
+ This job was started on 02/15/26 at 17:26
+  
+ Classification tree
+ Pruning by cross-validation
+ DSC file: dsc.txt
+ Training sample file: my_dataset_feb_14.txt
+ Missing value code: NA
+ Records in data file start on line 2
+ 2 N variables changed to S
+ D variable is vital_status
+ Number of records in data file: 5546
+ Length of longest entry in data file: 148
+ Missing values found in D variable
+ Missing values found among categorical variables
+ Separate categories will be created for missing categorical variables
+ Missing values found among non-categorical variables
+ Number of classes: 2
+ Training sample class proportions of D variable vital_status:
+ Class  #Cases     Proportion
+ Alive    4697     0.84706943
+ Dead      848     0.15293057
+  
+ Summary information for training sample of size 5545 (excluding observations
+  with non-positive weight or missing values in d, e, t, r or z variables)
+ d=dependent, b=split and fit cat variable using indicator variables,
+ c=split-only categorical, i=fit-only categorical (via indicators),
+ s=split-only numerical, n=split and fit numerical, f=fit-only numerical,
+ m=missing-value flag variable, p=periodic variable, w=weight
+                                                                     #Codes/           
+                                                                     Levels/           
+  Column  Name                               Minimum      Maximum    Periods   #Missing
+       1  disease_type                  c                                  9
+       2  age_at_index                  s    26.00        89.00    
+       3  gender                        c                                  2
+       4  race                          c                                  5
+       5  vital_status                  d                                  2
+       6  age_at_diagnosis              s    8370.       0.3287E+05               193
+       7  ajcc_pathologic_m             c                                  4      522
+       8  ajcc_pathologic_n             c                                 16      522
+       9  ajcc_pathologic_stage         c                                 13      567
+      10  ajcc_pathologic_t             c                                 16      520
+      11  ajcc_staging_system_edition   c                                  7     1162
+      12  classification_of_tumor       c                                  7
+      13  diagnosis_is_primary_disease  c                                  2        2
+      14  icd_10_code                   c                                  7      597
+      15  laterality                    c                                  2      467
+      16  metastasis_at_diagnosis       c                                  2     3634
+      17  method_of_diagnosis           c                                  9      971
+      18  primary_diagnosis             c                                 38
+      19  prior_malignancy              c                                  3      597
+      20  prior_treatment               c                                  3      200
+      21  site_of_resection_or_biopsy   c                                  2
+      22  sites_of_involvement          c                                 70      599
+      23  synchronous_malignancy        c                                  3      597
+      24  tissue_or_organ_of_origin     c                                 40
+      25  tumor_of_origin               c                                 85     5236
+      26  initial_disease_status        c                                  4     3972
+      27  margin_status                 c                                  5     4393
+      28  route_of_administration       c                                  6     4267
+      29  therapeutic_agents            c                                 65     3097
+      30  treatment_anatomic_sites      c                                 13     3684
+      31  treatment_intent_type         c                                  8     2036
+      32  treatment_or_therapy          c                                  3       36
+  
+ Numbers of N, F, S, and P below exclude constant variables
+      Total  #cases w/   #missing
+     #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
+       5546          1        194        0        0        0        2
+     #P-var   #M-var   #B-var   #C-var   #I-var
+          0        0        0       29        0
+ Number of cases used for training: 5545
+ Number of cases excluded due to 0 W or missing D variable: 1
+  
+ Pruning by v-fold cross-validation, with v = 10
+ Selected tree is based on mean of CV estimates
+ Number of SE's for pruned tree: 0.2500
+  
+ Simple node models
+ Estimated priors
+ Unit misclassification costs
+ Univariate split highest priority
+ Interaction and linear splits 2nd and 3rd priorities
+ Split values for N and S variables based on exhaustive search
+ Max number of interaction splits: 100
+ Maximum number of split levels: 15
+ Minimum node sample size: 5
+ Ranks of variables and their 1-df chi-squared values at root node
+      1  0.8281E+03   ajcc_pathologic_n
+      2  0.7391E+03   sites_of_involvement
+      3  0.7336E+03   ajcc_pathologic_stage
+      4  0.7037E+03   ajcc_pathologic_m
+      5  0.6922E+03   tumor_of_origin
+      6  0.6692E+03   initial_disease_status
+      7  0.6503E+03   metastasis_at_diagnosis
+      8  0.6379E+03   classification_of_tumor
+      9  0.6344E+03   ajcc_staging_system_edition
+     10  0.5693E+03   prior_treatment
+     11  0.5460E+03   tissue_or_organ_of_origin
+     12  0.5087E+03   laterality
+     13  0.4290E+03   ajcc_pathologic_t
+     14  0.4124E+03   site_of_resection_or_biopsy
+     15  0.4003E+03   method_of_diagnosis
+     16  0.3919E+03   diagnosis_is_primary_disease
+     17  0.3859E+03   icd_10_code
+     18  0.3794E+03   synchronous_malignancy
+     19  0.3794E+03   prior_malignancy
+     20  0.1305E+03   treatment_or_therapy
+     21  0.1291E+03   therapeutic_agents
+     22  0.1221E+03   treatment_intent_type
+     23  0.1178E+03   treatment_anatomic_sites
+     24  0.8657E+02   primary_diagnosis
+     25  0.7929E+02   margin_status
+     26  0.7711E+02   route_of_administration
+     27  0.6390E+02   race
+     28  0.3094E+02   age_at_index
+     29  0.1291E+02   age_at_diagnosis
+     30  0.1232E+02   disease_type
+     31  0.2341E+01   gender
+
+ Size and CV mean cost and SE of subtrees:
+  Tree   #Tnodes  Mean Cost   SE(Mean)   BSE(Mean)  Median Cost  BSE(Median)
+    1       75   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+    2       73   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+    3       72   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+    4       71   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+    5       69   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+    6       65   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+    7       64   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+    8       63   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+    9       62   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   10       61   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   11       60   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   12       59   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   13       57   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   14       56   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   15       55   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   16       54   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   17       53   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   18       52   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   19       51   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   20++     50   5.374E-02   3.028E-03   1.733E-03   5.140E-02   2.145E-03
+   21       48   5.428E-02   3.043E-03   1.974E-03   5.230E-02   2.023E-03
+   22**     46   5.428E-02   3.043E-03   1.974E-03   5.230E-02   2.023E-03
+   23       45   5.464E-02   3.052E-03   2.274E-03   5.230E-02   2.054E-03
+   24       41   5.482E-02   3.057E-03   2.196E-03   5.320E-02   2.144E-03
+   25       39   5.573E-02   3.081E-03   2.188E-03   5.500E-02   2.666E-03
+   26       37   5.861E-02   3.154E-03   2.854E-03   5.591E-02   3.015E-03
+   27       32   5.987E-02   3.186E-03   2.914E-03   5.591E-02   2.995E-03
+   28       31   6.078E-02   3.208E-03   2.819E-03   5.686E-02   3.144E-03
+   29       30   6.492E-02   3.309E-03   2.983E-03   6.227E-02   2.670E-03
+   30       29   6.492E-02   3.309E-03   2.983E-03   6.227E-02   2.670E-03
+   31       20   6.835E-02   3.389E-03   2.729E-03   6.679E-02   4.002E-03
+   32       19   6.961E-02   3.418E-03   3.096E-03   6.853E-02   4.419E-03
+   33       17   6.961E-02   3.418E-03   3.096E-03   6.853E-02   4.419E-03
+   34       16   6.961E-02   3.418E-03   3.096E-03   6.853E-02   4.419E-03
+   35       15   7.178E-02   3.466E-03   3.231E-03   6.949E-02   4.733E-03
+   36       14   7.448E-02   3.526E-03   3.136E-03   7.491E-02   5.611E-03
+   37       11   7.484E-02   3.534E-03   3.271E-03   7.491E-02   5.673E-03
+   38       10   7.773E-02   3.596E-03   3.003E-03   8.115E-02   4.222E-03
+   39        9   7.917E-02   3.626E-03   3.011E-03   8.205E-02   4.054E-03
+   40        5   8.873E-02   3.819E-03   2.373E-03   8.935E-02   2.718E-03
+   41        4   1.023E-01   4.069E-03   1.861E-03   1.037E-01   2.851E-03
+   42        3   1.192E-01   4.351E-03   2.127E-03   1.190E-01   2.677E-03
+   43        1   1.529E-01   4.833E-03   2.371E-04   1.532E-01   2.362E-04
+  
+ 0-SE tree based on mean is marked with * and has 50 terminal nodes
+ 0-SE tree based on median is marked with + and has 50 terminal nodes
+ Selected-SE tree based on mean using naive SE is marked with **
+ Selected-SE tree based on mean using bootstrap SE is marked with --
+ Selected-SE tree based on median and bootstrap SE is marked with ++
+ * tree same as + tree
+ ++ tree same as -- tree
+ + tree same as ++ tree
+ * tree same as ++ tree
+ * tree same as -- tree
+  
+ Following tree is based on mean CV with naive SE estimate (**)
+  
+ Structure of final tree. Each terminal node is marked with a T.
+  
+ Node cost is node misclassification cost divided by number of cases in node
+        Node    Total    Train    Predicted        Node    Split          Interacting
+       label    cases    cases    class            cost    variables      variable
+           1     5545     5545    Alive          1.529E-01 ajcc_pathologic_n 
+           2      739      739    Dead           4.789E-01 tumor_of_origin 
+           4      538      538    Alive          3.419E-01 method_of_diagnosis 
+           8      408      408    Alive          1.764E-01 classification_of_tumor 
+          16      123      123    Alive          3.820E-01 ajcc_staging_system_edition 
+          32T      15       15    Dead           0.000E+00 - 
+          33      108      108    Alive          2.962E-01 sites_of_involvement 
+          66       52       52    Dead           4.038E-01 race 
+         132T      43       43    Dead           3.023E-01 race 
+         133T       9        9    Alive          1.111E-01 - 
+          67T      56       56    Alive          1.785E-02 - 
+          17      285      285    Alive          8.770E-02 primary_diagnosis 
+          34T       8        8    Dead           0.000E+00 - 
+          35T     277      277    Alive          6.136E-02 classification_of_tumor 
+           9      130      130    Dead           1.384E-01 ajcc_pathologic_stage 
+          18       17       17    Alive          2.941E-01 age_at_index 
+          36T      12       12    Alive          0.000E+00 - 
+          37T       5        5    Dead           0.000E+00 - 
+          19T     113      113    Dead           5.309E-02 sites_of_involvement 
+           5T     201      201    Dead           0.000E+00 - 
+           3     4806     4806    Alive          9.632E-02 metastasis_at_diagnosis 
+           6       93       93    Dead           9.676E-02 prior_malignancy 
+          12T       6        6    Alive          0.000E+00 - 
+          13T      87       87    Dead           3.448E-02 method_of_diagnosis 
+           7     4713     4713    Alive          8.040E-02 ajcc_staging_system_edition 
+          14       49       49    Dead           4.285E-01 age_at_index 
+          28T      18       18    Alive          1.666E-01 ajcc_pathologic_t 
+          29T      31       31    Dead           1.935E-01 ajcc_pathologic_n 
+          15     4664     4664    Alive          7.524E-02 sites_of_involvement 
+          30      198      198    Alive          3.232E-01 ajcc_pathologic_n 
+          60       71       71    Dead           3.380E-01 ajcc_staging_system_edition 
+         120T      10       10    Alive          0.000E+00 - 
+         121T      61       61    Dead           2.295E-01 - 
+          61      127      127    Alive          1.338E-01 disease_type 
+         122T       9        9    Dead           0.000E+00 - 
+         123      118      118    Alive          6.778E-02 race 
+         246       12       12    Alive          4.999E-01 primary_diagnosis 
+         492T       6        6    Dead           0.000E+00 - 
+         493T       6        6    Alive          0.000E+00 - 
+         247T     106      106    Alive          1.886E-02 ajcc_pathologic_stage 
+          31     4466     4466    Alive          6.425E-02 primary_diagnosis 
+          62T       7        7    Dead           0.000E+00 - 
+          63     4459     4459    Alive          6.278E-02 margin_status 
+         126       51       51    Alive          3.921E-01 ajcc_staging_system_edition 
+         252T      16       16    Dead           6.249E-02 - 
+         253       35       35    Alive          1.428E-01 ajcc_pathologic_stage 
+         506T       9        9    Dead           4.444E-01 - 
+         507T      26       26    Alive          0.000E+00 - 
+         127     4408     4408    Alive          5.897E-02 treatment_anatomic_sites 
+         254T       8        8    Dead           2.500E-01 - 
+         255     4400     4400    Alive          5.772E-02 therapeutic_agents 
+         510       26       26    Dead           3.461E-01 age_at_index +age_at_diagnosis
+        1020T       8        8    Alive          1.250E-01 - 
+        1021T      18       18    Dead           1.111E-01 ajcc_pathologic_n 
+         511     4374     4374    Alive          5.417E-02 method_of_diagnosis 
+        1022      535      535    Alive          1.233E-01 ajcc_pathologic_n 
+        2044       71       71    Alive          4.084E-01 method_of_diagnosis 
+        4088T      15       15    Dead           0.000E+00 - 
+        4089       56       56    Alive          2.500E-01 ajcc_staging_system_edition 
+        8178       19       19    Dead           2.631E-01 age_at_index 
+       16356       11       11    Dead           4.545E-01 age_at_index 
+       32712T       6        6    Dead           0.000E+00 - 
+       32713T       5        5    Alive          0.000E+00 - 
+       16357T       8        8    Dead           0.000E+00 - 
+        8179T      37       37    Alive          0.000E+00 - 
+        2045      464      464    Alive          7.973E-02 age_at_diagnosis 
+        4090       93       93    Alive          2.365E-01 age_at_index 
+        8180T      24       24    Alive          0.000E+00 - 
+        8181       69       69    Alive          3.188E-01 primary_diagnosis 
+       16362       31       31    Dead           2.903E-01 age_at_index 
+       32724       22       22    Dead           4.090E-01 laterality 
+       65448T      13       13    Dead           0.000E+00 - 
+       65449T       9        9    Alive          0.000E+00 - 
+       32725T       9        9    Dead           0.000E+00 - 
+       16363T      38       38    Alive          0.000E+00 - 
+        4091T     371      371    Alive          4.042E-02 disease_type 
+        1023     3839     3839    Alive          4.453E-02 ajcc_pathologic_t 
+        2046      108      108    Alive          2.037E-01 primary_diagnosis 
+        4092       28       28    Dead           3.214E-01 ajcc_pathologic_stage 
+        8184T      19       19    Dead           0.000E+00 - 
+        8185T       9        9    Alive          0.000E+00 - 
+        4093T      80       80    Alive          3.749E-02 ajcc_pathologic_n 
+        2047     3731     3731    Alive          3.993E-02 icd_10_code 
+        4094T       5        5    Alive          0.000E+00 - 
+        4095     3726     3726    Alive          3.998E-02 icd_10_code 
+        8190T      11       11    Alive          0.000E+00 - 
+        8191     3715     3715    Alive          4.010E-02 icd_10_code 
+       16382     3651     3651    Alive          3.861E-02 age_at_index 
+       32764T       6        6    Dead           0.000E+00 - 
+       32765T    3645     3645    Alive          3.703E-02 age_at_index 
+       16383T      64       64    Alive          1.250E-01 classification_of_tumor 
+ Warning: tree very large, omitting node numbers in LaTeX file
+  
+ Number of terminal nodes of final tree: 46
+ Total number of nodes of final tree: 91
+ Second best split variable (based on curvature test) at root node is sites_of_involvement
+  
+ Classification tree:
+ For categorical variable splits, values not in training data go to the right
+  
+ Node 1: ajcc_pathologic_n = "N1b", "N3b", "N3c", "NA", "NX"
+   Node 2: tumor_of_origin = "NA", "TCGA-3C-AAAU_diagnosis",
+            "TCGA-A2-A0YC_diagnosis", "TCGA-A2-A0YJ_diagnosis",
+            "TCGA-A2-A25B_diagnosis", "TCGA-A2-A25E_diagnosis",
+            "TCGA-A7-A26H_diagnosis", "TCGA-A7-A3RF_diagnosis",
+            "TCGA-A7-A425_diagnosis", "TCGA-AO-A03N_diagnosis",
+            "TCGA-AO-A0J9_diagnosis", "TCGA-AO-A0JA_diagnosis",
+            "TCGA-AO-A126_diagnosis", "TCGA-B6-A0RI_diagnosis",
+            "TCGA-B6-A402_diagnosis", "TCGA-BH-A0BQ_diagnosis",
+            "TCGA-BH-A0C3_diagnosis", "TCGA-C8-A137_diagnosis",
+            "TCGA-D8-A1JA_diagnosis", "TCGA-E2-A10A_diagnosis",
+            "TCGA-E2-A152_diagnosis", "TCGA-E2-A15O_diagnosis",
+            "TCGA-E2-A1IE_diagnosis", "TCGA-E2-A1LL_diagnosis",
+            "TCGA-E9-A243_diagnosis", "TCGA-EW-A1P0_diagnosis",
+            "TCGA-EW-A1P1_diagnosis", "TCGA-EW-A1P7_diagnosis",
+            "TCGA-LL-A5YM_diagnosis", "TCGA-LQ-A4E4_diagnosis",
+            "TCGA-OL-A97C_diagnosis", "TCGA-Z7-A8R5_diagnosis"
+     Node 4: method_of_diagnosis = "Core_Biopsy", "NA", "Surgical_Resection"
+       Node 8: classification_of_tumor = "not_reported", "primary"
+         Node 16: ajcc_staging_system_edition = "4th", "5th"
+           Node 32: Dead
+         Node 16: ajcc_staging_system_edition /= "4th", "5th"
+           Node 33: sites_of_involvement = "Bone___NOS|Liver|Breast___NOS|Breast___Right_Upper_Inner|Breast___Right_Upper_Outer|Breast___Right_Lower_Inner|Breast___Right_Lower_Outer",
+                    "Breast___Right_Upper_Inner|Breast___Right_Lower_Inner",
+                    "NA"
+             Node 66: race = "black_or_african_american", "white"
+               Node 132: Dead
+             Node 66: race /= "black_or_african_american", "white"
+               Node 133: Alive
+           Node 33: sites_of_involvement /= "Bone___NOS|Liver|Breast___NOS|Breast___Right_Upper_Inner|Breast___Right_Upper_Outer|Breast___Right_Lower_Inner|Breast___Right_Lower_Outer",
+                    "Breast___Right_Upper_Inner|Breast___Right_Lower_Inner",
+                    "NA"
+             Node 67: Alive
+       Node 8: classification_of_tumor /= "not_reported", "primary"
+         Node 17: primary_diagnosis = "Combined_small_cell_carcinoma",
+                  "Malignant_lymphoma___non-Hodgkin___NOS",
+                  "Malignant_melanoma___NOS",
+                  "Myelodysplastic_syndrome___NOS"
+           Node 34: Dead
+         Node 17: primary_diagnosis /= "Combined_small_cell_carcinoma",
+                  "Malignant_lymphoma___non-Hodgkin___NOS",
+                  "Malignant_melanoma___NOS",
+                  "Myelodysplastic_syndrome___NOS"
+           Node 35: Alive
+     Node 4: method_of_diagnosis /= "Core_Biopsy", "NA", "Surgical_Resection"
+       Node 9: ajcc_pathologic_stage = "stage_II", "stage_IIA", "stage_IIIB"
+         Node 18: age_at_index <= 65.000000
+           Node 36: Alive
+         Node 18: age_at_index > 65.000000 or NA
+           Node 37: Dead
+       Node 9: ajcc_pathologic_stage /= "stage_II", "stage_IIA", "stage_IIIB"
+         Node 19: Dead
+   Node 2: tumor_of_origin /= "NA", "TCGA-3C-AAAU_diagnosis",
+            "TCGA-A2-A0YC_diagnosis", "TCGA-A2-A0YJ_diagnosis",
+            "TCGA-A2-A25B_diagnosis", "TCGA-A2-A25E_diagnosis",
+            "TCGA-A7-A26H_diagnosis", "TCGA-A7-A3RF_diagnosis",
+            "TCGA-A7-A425_diagnosis", "TCGA-AO-A03N_diagnosis",
+            "TCGA-AO-A0J9_diagnosis", "TCGA-AO-A0JA_diagnosis",
+            "TCGA-AO-A126_diagnosis", "TCGA-B6-A0RI_diagnosis",
+            "TCGA-B6-A402_diagnosis", "TCGA-BH-A0BQ_diagnosis",
+            "TCGA-BH-A0C3_diagnosis", "TCGA-C8-A137_diagnosis",
+            "TCGA-D8-A1JA_diagnosis", "TCGA-E2-A10A_diagnosis",
+            "TCGA-E2-A152_diagnosis", "TCGA-E2-A15O_diagnosis",
+            "TCGA-E2-A1IE_diagnosis", "TCGA-E2-A1LL_diagnosis",
+            "TCGA-E9-A243_diagnosis", "TCGA-EW-A1P0_diagnosis",
+            "TCGA-EW-A1P1_diagnosis", "TCGA-EW-A1P7_diagnosis",
+            "TCGA-LL-A5YM_diagnosis", "TCGA-LQ-A4E4_diagnosis",
+            "TCGA-OL-A97C_diagnosis", "TCGA-Z7-A8R5_diagnosis"
+     Node 5: Dead
+ Node 1: ajcc_pathologic_n /= "N1b", "N3b", "N3c", "NA", "NX"
+   Node 3: metastasis_at_diagnosis = "Metastasis___NOS"
+     Node 6: prior_malignancy = "yes"
+       Node 12: Alive
+     Node 6: prior_malignancy /= "yes"
+       Node 13: Dead
+   Node 3: metastasis_at_diagnosis /= "Metastasis___NOS"
+     Node 7: ajcc_staging_system_edition = "2nd", "3rd", "4th"
+       Node 14: age_at_index <= 45.500000
+         Node 28: Alive
+       Node 14: age_at_index > 45.500000 or NA
+         Node 29: Dead
+     Node 7: ajcc_staging_system_edition /= "2nd", "3rd", "4th"
+       Node 15: sites_of_involvement = "Breast___Left_Lower_Inner",
+                "Breast___Left_Upper_Inner|Breast___Left_Upper_Outer|Breast___Left_Lower_Inner|Breast___Left_Lower_Outer|Breast___NOS",
+                "Breast___Left_Upper_Outer|Breast___Left_Lower_Outer",
+                "Breast___NOS|Breast___Left_Upper_Outer|Breast___Left_Lower_Outer",
+                "Breast___NOS|Breast___Right_Lower_Outer",
+                "Breast___Right_Lower_Outer|Breast___NOS",
+                "Breast___Right_Upper_Inner|Breast___Right_Lower_Inner",
+                "Breast___Right_Upper_Outer|Breast___Right_Lower_Outer"
+         Node 30: ajcc_pathologic_n = "N0___i+__", "N0___i-__", "N2", "N3a"
+           Node 60: ajcc_staging_system_edition = "NA"
+             Node 120: Alive
+           Node 60: ajcc_staging_system_edition /= "NA"
+             Node 121: Dead
+         Node 30: ajcc_pathologic_n /= "N0___i+__", "N0___i-__", "N2", "N3a"
+           Node 61: disease_type = "Complex_Epithelial_Neoplasms"
+             Node 122: Dead
+           Node 61: disease_type /= "Complex_Epithelial_Neoplasms"
+             Node 123: race = "not_reported"
+               Node 246: primary_diagnosis = "Lobular_carcinoma___NOS"
+                 Node 492: Dead
+               Node 246: primary_diagnosis /= "Lobular_carcinoma___NOS"
+                 Node 493: Alive
+             Node 123: race /= "not_reported"
+               Node 247: Alive
+       Node 15: sites_of_involvement /= "Breast___Left_Lower_Inner",
+                "Breast___Left_Upper_Inner|Breast___Left_Upper_Outer|Breast___Left_Lower_Inner|Breast___Left_Lower_Outer|Breast___NOS",
+                "Breast___Left_Upper_Outer|Breast___Left_Lower_Outer",
+                "Breast___NOS|Breast___Left_Upper_Outer|Breast___Left_Lower_Outer",
+                "Breast___NOS|Breast___Right_Lower_Outer",
+                "Breast___Right_Lower_Outer|Breast___NOS",
+                "Breast___Right_Upper_Inner|Breast___Right_Lower_Inner",
+                "Breast___Right_Upper_Outer|Breast___Right_Lower_Outer"
+         Node 31: primary_diagnosis = "Clear_cell_carcinoma",
+                  "Large_cell_neuroendocrine_carcinoma",
+                  "Paget_disease_and_infiltrating_duct_carcinoma_of_breast"
+           Node 62: Dead
+         Node 31: primary_diagnosis /= "Clear_cell_carcinoma",
+                  "Large_cell_neuroendocrine_carcinoma",
+                  "Paget_disease_and_infiltrating_duct_carcinoma_of_breast"
+           Node 63: margin_status = "Not_Reported"
+             Node 126: ajcc_staging_system_edition = "5th"
+               Node 252: Dead
+             Node 126: ajcc_staging_system_edition /= "5th"
+               Node 253: ajcc_pathologic_stage = "NA", "stage_IIIA", "stage_IIIC"
+                 Node 506: Dead
+               Node 253: ajcc_pathologic_stage /= "NA", "stage_IIIA", "stage_IIIC"
+                 Node 507: Alive
+           Node 63: margin_status /= "Not_Reported"
+             Node 127: treatment_anatomic_sites = "Distant_Site"
+               Node 254: Dead
+             Node 127: treatment_anatomic_sites /= "Distant_Site"
+               Node 255: therapeutic_agents = "Capecitabine", "Denosumab",
+                        "Etoposide", "Fulvestrant", "Ifosfamide", "Mesna",
+                        "Mitomycin", "Pamidronic_Acid",
+                        "Pegylated_Liposomal_Doxorubicin_Hydrochloride",
+                        "Prednisone", "Rituximab", "Vincristine"
+                 Node 510: -0.27718951E-02 * age_at_diagnosis + age_at_index <= -1.2325482
+                   Node 1020: Alive
+                 Node 510: -0.27718951E-02 * age_at_diagnosis + age_at_index > -1.2325482 or NA
+                   Node 1021: Dead
+               Node 255: therapeutic_agents /= "Capecitabine", "Denosumab",
+                        "Etoposide", "Fulvestrant", "Ifosfamide", "Mesna",
+                        "Mitomycin", "Pamidronic_Acid",
+                        "Pegylated_Liposomal_Doxorubicin_Hydrochloride",
+                        "Prednisone", "Rituximab", "Vincristine"
+                 Node 511: method_of_diagnosis = "Biopsy", "Cytology",
+                          "Excisional_Biopsy", "Fine_Needle_Aspiration",
+                          "Incisional_Biopsy"
+                   Node 1022: ajcc_pathologic_n = "N1", "N1mi", "N3a"
+                     Node 2044: method_of_diagnosis = "Biopsy", "Cytology"
+                       Node 4088: Dead
+                     Node 2044: method_of_diagnosis /= "Biopsy", "Cytology"
+                       Node 4089: ajcc_staging_system_edition = "6th", "NA"
+                         Node 8178: age_at_index <= 43.000000
+                           Node 16356: age_at_index <= 35.500000
+                             Node 32712: Dead
+                           Node 16356: age_at_index > 35.500000 or NA
+                             Node 32713: Alive
+                         Node 8178: age_at_index > 43.000000 or NA
+                           Node 16357: Dead
+                       Node 4089: ajcc_staging_system_edition /= "6th", "NA"
+                         Node 8179: Alive
+                   Node 1022: ajcc_pathologic_n /= "N1", "N1mi", "N3a"
+                     Node 2045: age_at_diagnosis <= 16645.500
+                       Node 4090: age_at_index <= 39.500000
+                         Node 8180: Alive
+                       Node 4090: age_at_index > 39.500000 or NA
+                         Node 8181: primary_diagnosis = "Infiltrating_duct_carcinoma___NOS"
+                           Node 16362: age_at_index <= 43.500000
+                             Node 32724: laterality = "Left"
+                               Node 65448: Dead
+                             Node 32724: laterality /= "Left"
+                               Node 65449: Alive
+                           Node 16362: age_at_index > 43.500000 or NA
+                             Node 32725: Dead
+                         Node 8181: primary_diagnosis /= "Infiltrating_duct_carcinoma___NOS"
+                           Node 16363: Alive
+                     Node 2045: age_at_diagnosis > 16645.500 or NA
+                       Node 4091: Alive
+                 Node 511: method_of_diagnosis /= "Biopsy", "Cytology",
+                          "Excisional_Biopsy", "Fine_Needle_Aspiration",
+                          "Incisional_Biopsy"
+                   Node 1023: ajcc_pathologic_t = "T1b", "T4b"
+                     Node 2046: primary_diagnosis = "Lobular_carcinoma___NOS", "Mucinous_adenocarcinoma"
+                       Node 4092: ajcc_pathologic_stage = "stage_IIIB", "stage_IIIC"
+                         Node 8184: Dead
+                       Node 4092: ajcc_pathologic_stage /= "stage_IIIB", "stage_IIIC"
+                         Node 8185: Alive
+                     Node 2046: primary_diagnosis /= "Lobular_carcinoma___NOS", "Mucinous_adenocarcinoma"
+                       Node 4093: Alive
+                   Node 1023: ajcc_pathologic_t /= "T1b", "T4b"
+                     Node 2047: icd_10_code = "C50.8"
+                       Node 4094: Alive
+                     Node 2047: icd_10_code /= "C50.8"
+                       Node 4095: icd_10_code = "C50.2", "C50.5"
+                         Node 8190: Alive
+                       Node 4095: icd_10_code /= "C50.2", "C50.5"
+                         Node 8191: icd_10_code = "C50.9"
+                           Node 16382: age_at_index <= 26.500000
+                             Node 32764: Dead
+                           Node 16382: age_at_index > 26.500000 or NA
+                             Node 32765: Alive
+                         Node 8191: icd_10_code /= "C50.9"
+                           Node 16383: Alive
+ 
+ ***************************************************************
+ Predictor means below are means of cases with no missing values.
+  
+Node 1: Intermediate node
+ A case goes into Node 2 if ajcc_pathologic_n = "N1b", "N3b", "N3c", "NA", "NX"
+ ajcc_pathologic_n mode = "N0"
+ Class      Number   Posterior
+ Alive        4697  0.8471E+00
+ Dead          848  0.1529E+00
+ Number of training cases misclassified = 848
+ Predicted class is Alive
+ ----------------------------
+Node 2: Intermediate node
+ A case goes into Node 4 if tumor_of_origin = "NA", "TCGA-3C-AAAU_diagnosis",
+ "TCGA-A2-A0YC_diagnosis", "TCGA-A2-A0YJ_diagnosis", "TCGA-A2-A25B_diagnosis",
+ "TCGA-A2-A25E_diagnosis", "TCGA-A7-A26H_diagnosis", "TCGA-A7-A3RF_diagnosis",
+ "TCGA-A7-A425_diagnosis", "TCGA-AO-A03N_diagnosis", "TCGA-AO-A0J9_diagnosis",
+ "TCGA-AO-A0JA_diagnosis", "TCGA-AO-A126_diagnosis", "TCGA-B6-A0RI_diagnosis",
+ "TCGA-B6-A402_diagnosis", "TCGA-BH-A0BQ_diagnosis", "TCGA-BH-A0C3_diagnosis",
+ "TCGA-C8-A137_diagnosis", "TCGA-D8-A1JA_diagnosis", "TCGA-E2-A10A_diagnosis",
+ "TCGA-E2-A152_diagnosis", "TCGA-E2-A15O_diagnosis", "TCGA-E2-A1IE_diagnosis",
+ "TCGA-E2-A1LL_diagnosis", "TCGA-E9-A243_diagnosis", "TCGA-EW-A1P0_diagnosis",
+ "TCGA-EW-A1P1_diagnosis", "TCGA-EW-A1P7_diagnosis", "TCGA-LL-A5YM_diagnosis",
+ "TCGA-LQ-A4E4_diagnosis", "TCGA-OL-A97C_diagnosis", "TCGA-Z7-A8R5_diagnosis"
+ tumor_of_origin mode = "NA"
+ Class      Number   Posterior
+ Alive         354  0.4790E+00
+ Dead          385  0.5210E+00
+ Number of training cases misclassified = 354
+ Predicted class is Dead
+ ----------------------------
+Node 4: Intermediate node
+ A case goes into Node 8 if method_of_diagnosis = "Core_Biopsy", "NA",
+ "Surgical_Resection"
+ method_of_diagnosis mode = "NA"
+ Class      Number   Posterior
+ Alive         354  0.6580E+00
+ Dead          184  0.3420E+00
+ Number of training cases misclassified = 184
+ Predicted class is Alive
+ ----------------------------
+Node 8: Intermediate node
+ A case goes into Node 16 if classification_of_tumor = "not_reported", "primary"
+ classification_of_tumor mode = "Prior_primary"
+ Class      Number   Posterior
+ Alive         336  0.8235E+00
+ Dead           72  0.1765E+00
+ Number of training cases misclassified = 72
+ Predicted class is Alive
+ ----------------------------
+Node 16: Intermediate node
+ A case goes into Node 32 if ajcc_staging_system_edition = "4th", "5th"
+ ajcc_staging_system_edition mode = "NA"
+ Class      Number   Posterior
+ Alive          76  0.6179E+00
+ Dead           47  0.3821E+00
+ Number of training cases misclassified = 47
+ Predicted class is Alive
+ ----------------------------
+Node 32: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead           15  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 33: Intermediate node
+ A case goes into Node 66 if sites_of_involvement =
+ "Bone___NOS|Liver|Breast___NOS|Breast___Right_Upper_Inner|Breast___Right_Upper_Outer|Breas
+ sites_of_involvement mode = "NA"
+ Class      Number   Posterior
+ Alive          76  0.7037E+00
+ Dead           32  0.2963E+00
+ Number of training cases misclassified = 32
+ Predicted class is Alive
+ ----------------------------
+Node 66: Intermediate node
+ A case goes into Node 132 if race = "black_or_african_american", "white"
+ race mode = "white"
+ Class      Number   Posterior
+ Alive          21  0.4038E+00
+ Dead           31  0.5962E+00
+ Number of training cases misclassified = 21
+ Predicted class is Dead
+ ----------------------------
+Node 132: Terminal node
+ Class      Number   Posterior
+ Alive          13  0.3023E+00
+ Dead           30  0.6977E+00
+ Number of training cases misclassified = 13
+ Predicted class is Dead
+ ----------------------------
+Node 133: Terminal node
+ Class      Number   Posterior
+ Alive           8  0.8889E+00
+ Dead            1  0.1111E+00
+ Number of training cases misclassified = 1
+ Predicted class is Alive
+ ----------------------------
+Node 67: Terminal node
+ Class      Number   Posterior
+ Alive          55  0.9821E+00
+ Dead            1  0.1786E-01
+ Number of training cases misclassified = 1
+ Predicted class is Alive
+ ----------------------------
+Node 17: Intermediate node
+ A case goes into Node 34 if primary_diagnosis = "Combined_small_cell_carcinoma", 
+ "Malignant_lymphoma___non-Hodgkin___NOS", "Malignant_melanoma___NOS",
+ "Myelodysplastic_syndrome___NOS"
+ primary_diagnosis mode = "Not_Reported"
+ Class      Number   Posterior
+ Alive         260  0.9123E+00
+ Dead           25  0.8772E-01
+ Number of training cases misclassified = 25
+ Predicted class is Alive
+ ----------------------------
+Node 34: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            8  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 35: Terminal node
+ Class      Number   Posterior
+ Alive         260  0.9386E+00
+ Dead           17  0.6137E-01
+ Number of training cases misclassified = 17
+ Predicted class is Alive
+ ----------------------------
+Node 9: Intermediate node
+ A case goes into Node 18 if ajcc_pathologic_stage = "stage_II", "stage_IIA",
+ "stage_IIIB"
+ ajcc_pathologic_stage mode = "stage_IIB"
+ Class      Number   Posterior
+ Alive          18  0.1385E+00
+ Dead          112  0.8615E+00
+ Number of training cases misclassified = 18
+ Predicted class is Dead
+ ----------------------------
+Node 18: Intermediate node
+ A case goes into Node 36 if age_at_index <= 65.000000
+ age_at_index mean = 59.647059
+ Class      Number   Posterior
+ Alive          12  0.7059E+00
+ Dead            5  0.2941E+00
+ Number of training cases misclassified = 5
+ Predicted class is Alive
+ ----------------------------
+Node 36: Terminal node
+ Class      Number   Posterior
+ Alive          12  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 37: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            5  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 19: Terminal node
+ Class      Number   Posterior
+ Alive           6  0.5310E-01
+ Dead          107  0.9469E+00
+ Number of training cases misclassified = 6
+ Predicted class is Dead
+ ----------------------------
+Node 5: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead          201  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 3: Intermediate node
+ A case goes into Node 6 if metastasis_at_diagnosis = "Metastasis___NOS"
+ metastasis_at_diagnosis mode = "NA"
+ Class      Number   Posterior
+ Alive        4343  0.9037E+00
+ Dead          463  0.9634E-01
+ Number of training cases misclassified = 463
+ Predicted class is Alive
+ ----------------------------
+Node 6: Intermediate node
+ A case goes into Node 12 if prior_malignancy = "yes"
+ prior_malignancy mode = "no"
+ Class      Number   Posterior
+ Alive           9  0.9677E-01
+ Dead           84  0.9032E+00
+ Number of training cases misclassified = 9
+ Predicted class is Dead
+ ----------------------------
+Node 12: Terminal node
+ Class      Number   Posterior
+ Alive           6  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 13: Terminal node
+ Class      Number   Posterior
+ Alive           3  0.3448E-01
+ Dead           84  0.9655E+00
+ Number of training cases misclassified = 3
+ Predicted class is Dead
+ ----------------------------
+Node 7: Intermediate node
+ A case goes into Node 14 if ajcc_staging_system_edition = "2nd", "3rd", "4th"
+ ajcc_staging_system_edition mode = "6th"
+ Class      Number   Posterior
+ Alive        4334  0.9196E+00
+ Dead          379  0.8042E-01
+ Number of training cases misclassified = 379
+ Predicted class is Alive
+ ----------------------------
+Node 14: Intermediate node
+ A case goes into Node 28 if age_at_index <= 45.500000
+ age_at_index mean = 52.387755
+ Class      Number   Posterior
+ Alive          21  0.4286E+00
+ Dead           28  0.5714E+00
+ Number of training cases misclassified = 21
+ Predicted class is Dead
+ ----------------------------
+Node 28: Terminal node
+ Class      Number   Posterior
+ Alive          15  0.8333E+00
+ Dead            3  0.1667E+00
+ Number of training cases misclassified = 3
+ Predicted class is Alive
+ ----------------------------
+Node 29: Terminal node
+ Class      Number   Posterior
+ Alive           6  0.1935E+00
+ Dead           25  0.8065E+00
+ Number of training cases misclassified = 6
+ Predicted class is Dead
+ ----------------------------
+Node 15: Intermediate node
+ A case goes into Node 30 if sites_of_involvement = "Breast___Left_Lower_Inner", 
+ "Breast___Left_Upper_Inner|Breast___Left_Upper_Outer|Breast___Left_Lower_Inner|Breast___Le
+ "Breast___Left_Upper_Outer|Breast___Left_Lower_Outer",
+ "Breast___NOS|Breast___Left_Upper_Outer|Breast___Left_Lower_Outer",
+ "Breast___NOS|Breast___Right_Lower_Outer", "Breast___Right_Lower_Outer|Breast___NOS",
+ "Breast___Right_Upper_Inner|Breast___Right_Lower_Inner",
+ "Breast___Right_Upper_Outer|Breast___Right_Lower_Outer"
+ sites_of_involvement mode = "Breast___NOS"
+ Class      Number   Posterior
+ Alive        4313  0.9247E+00
+ Dead          351  0.7526E-01
+ Number of training cases misclassified = 351
+ Predicted class is Alive
+ ----------------------------
+Node 30: Intermediate node
+ A case goes into Node 60 if ajcc_pathologic_n = "N0___i+__", "N0___i-__", "N2", "N3a"
+ ajcc_pathologic_n mode = "N0"
+ Class      Number   Posterior
+ Alive         134  0.6768E+00
+ Dead           64  0.3232E+00
+ Number of training cases misclassified = 64
+ Predicted class is Alive
+ ----------------------------
+Node 60: Intermediate node
+ A case goes into Node 120 if ajcc_staging_system_edition = "NA"
+ ajcc_staging_system_edition mode = "6th"
+ Class      Number   Posterior
+ Alive          24  0.3380E+00
+ Dead           47  0.6620E+00
+ Number of training cases misclassified = 24
+ Predicted class is Dead
+ ----------------------------
+Node 120: Terminal node
+ Class      Number   Posterior
+ Alive          10  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 121: Terminal node
+ Class      Number   Posterior
+ Alive          14  0.2295E+00
+ Dead           47  0.7705E+00
+ Number of training cases misclassified = 14
+ Predicted class is Dead
+ ----------------------------
+Node 61: Intermediate node
+ A case goes into Node 122 if disease_type = "Complex_Epithelial_Neoplasms"
+ disease_type mode = "Ductal_and_Lobular_Neoplasms"
+ Class      Number   Posterior
+ Alive         110  0.8661E+00
+ Dead           17  0.1339E+00
+ Number of training cases misclassified = 17
+ Predicted class is Alive
+ ----------------------------
+Node 122: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            9  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 123: Intermediate node
+ A case goes into Node 246 if race = "not_reported"
+ race mode = "white"
+ Class      Number   Posterior
+ Alive         110  0.9322E+00
+ Dead            8  0.6780E-01
+ Number of training cases misclassified = 8
+ Predicted class is Alive
+ ----------------------------
+Node 246: Intermediate node
+ A case goes into Node 492 if primary_diagnosis = "Lobular_carcinoma___NOS"
+ primary_diagnosis mode = "Infiltrating_duct_carcinoma___NOS"
+ Class      Number   Posterior
+ Alive           6  0.5000E+00
+ Dead            6  0.5000E+00
+ Number of training cases misclassified = 6
+ Predicted class is Alive
+ ----------------------------
+Node 492: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            6  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 493: Terminal node
+ Class      Number   Posterior
+ Alive           6  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 247: Terminal node
+ Class      Number   Posterior
+ Alive         104  0.9811E+00
+ Dead            2  0.1887E-01
+ Number of training cases misclassified = 2
+ Predicted class is Alive
+ ----------------------------
+Node 31: Intermediate node
+ A case goes into Node 62 if primary_diagnosis = "Clear_cell_carcinoma", 
+ "Large_cell_neuroendocrine_carcinoma", "Paget_disease_and_infiltrating_duct_carcinoma_of_b
+ primary_diagnosis mode = "Infiltrating_duct_carcinoma___NOS"
+ Class      Number   Posterior
+ Alive        4179  0.9357E+00
+ Dead          287  0.6426E-01
+ Number of training cases misclassified = 287
+ Predicted class is Alive
+ ----------------------------
+Node 62: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            7  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 63: Intermediate node
+ A case goes into Node 126 if margin_status = "Not_Reported"
+ margin_status mode = "NA"
+ Class      Number   Posterior
+ Alive        4179  0.9372E+00
+ Dead          280  0.6279E-01
+ Number of training cases misclassified = 280
+ Predicted class is Alive
+ ----------------------------
+Node 126: Intermediate node
+ A case goes into Node 252 if ajcc_staging_system_edition = "5th"
+ ajcc_staging_system_edition mode = "7th"
+ Class      Number   Posterior
+ Alive          31  0.6078E+00
+ Dead           20  0.3922E+00
+ Number of training cases misclassified = 20
+ Predicted class is Alive
+ ----------------------------
+Node 252: Terminal node
+ Class      Number   Posterior
+ Alive           1  0.6250E-01
+ Dead           15  0.9375E+00
+ Number of training cases misclassified = 1
+ Predicted class is Dead
+ ----------------------------
+Node 253: Intermediate node
+ A case goes into Node 506 if ajcc_pathologic_stage = "NA", "stage_IIIA", "stage_IIIC"
+ ajcc_pathologic_stage mode = "stage_IIA"
+ Class      Number   Posterior
+ Alive          30  0.8571E+00
+ Dead            5  0.1429E+00
+ Number of training cases misclassified = 5
+ Predicted class is Alive
+ ----------------------------
+Node 506: Terminal node
+ Class      Number   Posterior
+ Alive           4  0.4444E+00
+ Dead            5  0.5556E+00
+ Number of training cases misclassified = 4
+ Predicted class is Dead
+ ----------------------------
+Node 507: Terminal node
+ Class      Number   Posterior
+ Alive          26  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 127: Intermediate node
+ A case goes into Node 254 if treatment_anatomic_sites = "Distant_Site"
+ treatment_anatomic_sites mode = "NA"
+ Class      Number   Posterior
+ Alive        4148  0.9410E+00
+ Dead          260  0.5898E-01
+ Number of training cases misclassified = 260
+ Predicted class is Alive
+ ----------------------------
+Node 254: Terminal node
+ Class      Number   Posterior
+ Alive           2  0.2500E+00
+ Dead            6  0.7500E+00
+ Number of training cases misclassified = 2
+ Predicted class is Dead
+ ----------------------------
+Node 255: Intermediate node
+ A case goes into Node 510 if therapeutic_agents = "Capecitabine", "Denosumab",
+ "Etoposide", "Fulvestrant", "Ifosfamide", "Mesna", "Mitomycin", "Pamidronic_Acid",
+ "Pegylated_Liposomal_Doxorubicin_Hydrochloride", "Prednisone", "Rituximab", "Vincristine"
+ therapeutic_agents mode = "NA"
+ Class      Number   Posterior
+ Alive        4146  0.9423E+00
+ Dead          254  0.5773E-01
+ Number of training cases misclassified = 254
+ Predicted class is Alive
+ ----------------------------
+Node 510: Intermediate node
+ A case goes into Node 1020 if -0.27718951E-02 * age_at_diagnosis + age_at_index <= -1.2325482
+ Linear combination mean = -1.1076426
+ Class      Number   Posterior
+ Alive           9  0.3462E+00
+ Dead           17  0.6538E+00
+ Number of training cases misclassified = 9
+ Predicted class is Dead
+ ----------------------------
+Node 1020: Terminal node
+ Class      Number   Posterior
+ Alive           7  0.8750E+00
+ Dead            1  0.1250E+00
+ Number of training cases misclassified = 1
+ Predicted class is Alive
+ ----------------------------
+Node 1021: Terminal node
+ Class      Number   Posterior
+ Alive           2  0.1111E+00
+ Dead           16  0.8889E+00
+ Number of training cases misclassified = 2
+ Predicted class is Dead
+ ----------------------------
+Node 511: Intermediate node
+ A case goes into Node 1022 if method_of_diagnosis = "Biopsy", "Cytology",
+ "Excisional_Biopsy", "Fine_Needle_Aspiration", "Incisional_Biopsy"
+ method_of_diagnosis mode = "Core_Biopsy"
+ Class      Number   Posterior
+ Alive        4137  0.9458E+00
+ Dead          237  0.5418E-01
+ Number of training cases misclassified = 237
+ Predicted class is Alive
+ ----------------------------
+Node 1022: Intermediate node
+ A case goes into Node 2044 if ajcc_pathologic_n = "N1", "N1mi", "N3a"
+ ajcc_pathologic_n mode = "N0"
+ Class      Number   Posterior
+ Alive         469  0.8766E+00
+ Dead           66  0.1234E+00
+ Number of training cases misclassified = 66
+ Predicted class is Alive
+ ----------------------------
+Node 2044: Intermediate node
+ A case goes into Node 4088 if method_of_diagnosis = "Biopsy", "Cytology"
+ method_of_diagnosis mode = "Fine_Needle_Aspiration"
+ Class      Number   Posterior
+ Alive          42  0.5915E+00
+ Dead           29  0.4085E+00
+ Number of training cases misclassified = 29
+ Predicted class is Alive
+ ----------------------------
+Node 4088: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead           15  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 4089: Intermediate node
+ A case goes into Node 8178 if ajcc_staging_system_edition = "6th", "NA"
+ ajcc_staging_system_edition mode = "7th"
+ Class      Number   Posterior
+ Alive          42  0.7500E+00
+ Dead           14  0.2500E+00
+ Number of training cases misclassified = 14
+ Predicted class is Alive
+ ----------------------------
+Node 8178: Intermediate node
+ A case goes into Node 16356 if age_at_index <= 43.000000
+ age_at_index mean = 46.000000
+ Class      Number   Posterior
+ Alive           5  0.2632E+00
+ Dead           14  0.7368E+00
+ Number of training cases misclassified = 5
+ Predicted class is Dead
+ ----------------------------
+Node 16356: Intermediate node
+ A case goes into Node 32712 if age_at_index <= 35.500000
+ age_at_index mean = 35.454545
+ Class      Number   Posterior
+ Alive           5  0.4545E+00
+ Dead            6  0.5455E+00
+ Number of training cases misclassified = 5
+ Predicted class is Dead
+ ----------------------------
+Node 32712: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            6  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 32713: Terminal node
+ Class      Number   Posterior
+ Alive           5  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 16357: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            8  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 8179: Terminal node
+ Class      Number   Posterior
+ Alive          37  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 2045: Intermediate node
+ A case goes into Node 4090 if age_at_diagnosis <= 16645.500
+ age_at_diagnosis mean = 20776.838
+ Class      Number   Posterior
+ Alive         427  0.9203E+00
+ Dead           37  0.7974E-01
+ Number of training cases misclassified = 37
+ Predicted class is Alive
+ ----------------------------
+Node 4090: Intermediate node
+ A case goes into Node 8180 if age_at_index <= 39.500000
+ age_at_index mean = 39.870968
+ Class      Number   Posterior
+ Alive          71  0.7634E+00
+ Dead           22  0.2366E+00
+ Number of training cases misclassified = 22
+ Predicted class is Alive
+ ----------------------------
+Node 8180: Terminal node
+ Class      Number   Posterior
+ Alive          24  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 8181: Intermediate node
+ A case goes into Node 16362 if primary_diagnosis = "Infiltrating_duct_carcinoma___NOS"
+ primary_diagnosis mode = "Infiltrating_duct_carcinoma___NOS"
+ Class      Number   Posterior
+ Alive          47  0.6812E+00
+ Dead           22  0.3188E+00
+ Number of training cases misclassified = 22
+ Predicted class is Alive
+ ----------------------------
+Node 16362: Intermediate node
+ A case goes into Node 32724 if age_at_index <= 43.500000
+ age_at_index mean = 41.774194
+ Class      Number   Posterior
+ Alive           9  0.2903E+00
+ Dead           22  0.7097E+00
+ Number of training cases misclassified = 9
+ Predicted class is Dead
+ ----------------------------
+Node 32724: Intermediate node
+ A case goes into Node 65448 if laterality = "Left"
+ laterality mode = "Left"
+ Class      Number   Posterior
+ Alive           9  0.4091E+00
+ Dead           13  0.5909E+00
+ Number of training cases misclassified = 9
+ Predicted class is Dead
+ ----------------------------
+Node 65448: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead           13  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 65449: Terminal node
+ Class      Number   Posterior
+ Alive           9  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 32725: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            9  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 16363: Terminal node
+ Class      Number   Posterior
+ Alive          38  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 4091: Terminal node
+ Class      Number   Posterior
+ Alive         356  0.9596E+00
+ Dead           15  0.4043E-01
+ Number of training cases misclassified = 15
+ Predicted class is Alive
+ ----------------------------
+Node 1023: Intermediate node
+ A case goes into Node 2046 if ajcc_pathologic_t = "T1b", "T4b"
+ ajcc_pathologic_t mode = "T2"
+ Class      Number   Posterior
+ Alive        3668  0.9555E+00
+ Dead          171  0.4454E-01
+ Number of training cases misclassified = 171
+ Predicted class is Alive
+ ----------------------------
+Node 2046: Intermediate node
+ A case goes into Node 4092 if primary_diagnosis = "Lobular_carcinoma___NOS", "Mucinous_adenocarcinoma"
+ primary_diagnosis mode = "Infiltrating_duct_carcinoma___NOS"
+ Class      Number   Posterior
+ Alive          86  0.7963E+00
+ Dead           22  0.2037E+00
+ Number of training cases misclassified = 22
+ Predicted class is Alive
+ ----------------------------
+Node 4092: Intermediate node
+ A case goes into Node 8184 if ajcc_pathologic_stage = "stage_IIIB", "stage_IIIC"
+ ajcc_pathologic_stage mode = "stage_IIIC"
+ Class      Number   Posterior
+ Alive           9  0.3214E+00
+ Dead           19  0.6786E+00
+ Number of training cases misclassified = 9
+ Predicted class is Dead
+ ----------------------------
+Node 8184: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead           19  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 8185: Terminal node
+ Class      Number   Posterior
+ Alive           9  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 4093: Terminal node
+ Class      Number   Posterior
+ Alive          77  0.9625E+00
+ Dead            3  0.3750E-01
+ Number of training cases misclassified = 3
+ Predicted class is Alive
+ ----------------------------
+Node 2047: Intermediate node
+ A case goes into Node 4094 if icd_10_code = "C50.8"
+ icd_10_code mode = "C50.9"
+ Class      Number   Posterior
+ Alive        3582  0.9601E+00
+ Dead          149  0.3994E-01
+ Number of training cases misclassified = 149
+ Predicted class is Alive
+ ----------------------------
+Node 4094: Terminal node
+ Class      Number   Posterior
+ Alive           5  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 4095: Intermediate node
+ A case goes into Node 8190 if icd_10_code = "C50.2", "C50.5"
+ icd_10_code mode = "C50.9"
+ Class      Number   Posterior
+ Alive        3577  0.9600E+00
+ Dead          149  0.3999E-01
+ Number of training cases misclassified = 149
+ Predicted class is Alive
+ ----------------------------
+Node 8190: Terminal node
+ Class      Number   Posterior
+ Alive          11  0.1000E+01
+ Dead            0  0.2757E-04
+ Number of training cases misclassified = 0
+ Predicted class is Alive
+ ----------------------------
+Node 8191: Intermediate node
+ A case goes into Node 16382 if icd_10_code = "C50.9"
+ icd_10_code mode = "C50.9"
+ Class      Number   Posterior
+ Alive        3566  0.9599E+00
+ Dead          149  0.4011E-01
+ Number of training cases misclassified = 149
+ Predicted class is Alive
+ ----------------------------
+Node 16382: Intermediate node
+ A case goes into Node 32764 if age_at_index <= 26.500000
+ age_at_index mean = 56.361819
+ Class      Number   Posterior
+ Alive        3510  0.9614E+00
+ Dead          141  0.3862E-01
+ Number of training cases misclassified = 141
+ Predicted class is Alive
+ ----------------------------
+Node 32764: Terminal node
+ Class      Number   Posterior
+ Alive           0  0.1527E-03
+ Dead            6  0.9998E+00
+ Number of training cases misclassified = 0
+ Predicted class is Dead
+ ----------------------------
+Node 32765: Terminal node
+ Class      Number   Posterior
+ Alive        3510  0.9630E+00
+ Dead          135  0.3704E-01
+ Number of training cases misclassified = 135
+ Predicted class is Alive
+ ----------------------------
+Node 16383: Terminal node
+ Class      Number   Posterior
+ Alive          56  0.8750E+00
+ Dead            8  0.1250E+00
+ Number of training cases misclassified = 8
+ Predicted class is Alive
+ ----------------------------
+ 
+ Classification matrix for training sample:
+ Predicted      True class
+ class          Alive      Dead
+ Alive           4646       186
+ Dead              51       662
+ Total           4697       848
+ 
+ Number of cases used for tree construction: 5545
+ Number misclassified: 237
+ Resubstitution estimate of mean misclassification cost: 0.42741208E-01
+ 
+ Observed and fitted values are stored in fit2.txt
+ LaTeX code for tree is in tree2.tex
+ Elapsed time in seconds: 2.3799

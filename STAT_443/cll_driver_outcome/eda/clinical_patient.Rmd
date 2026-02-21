@@ -1,0 +1,182 @@
+---
+title: "clinical_patient_dataset_cleaning"
+output: html_document
+author: "Soren Basnet"
+---
+
+Import required library
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+dataset_path <- "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/cll_driver_outcome/data/cll_broad_2022/"
+```
+
+```{r}
+data_clinical_patient <- read.table(file.path(dataset_path,"data_clinical_patient.txt"),header=TRUE, sep="\t")
+colnames(data_clinical_patient)
+```
+
+```{r}
+
+data_armlevel_cna <- read.table(file.path(dataset_path,"data_armlevel_cna.txt"),header=TRUE, sep="\t")
+
+colnames(data_armlevel_cna)
+
+data_clinical_sample <- read.table(file.path(dataset_path,"data_clinical_sample.txt"),header=TRUE, sep="\t")
+
+colnames(data_clinical_sample)
+
+
+data_focal_cna <- read.table(file.path(dataset_path,"data_focal_cna.txt"),header=TRUE, sep="\t")
+
+colnames(data_focal_cna)
+
+data_gene_panel_matrix <- read.table(file.path(dataset_path,"data_gene_panel_matrix.txt"),header=TRUE, sep="\t")
+
+colnames(data_gene_panel_matrix)
+
+
+data_mrna_seq_tpm_zscores_ref_all_samples <- read.table(file.path(dataset_path,"data_mrna_seq_tpm_zscores_ref_all_samples.txt"),header=TRUE, sep="\t")
+
+colnames(data_mrna_seq_tpm_zscores_ref_all_samples)
+
+
+data_mrna_seq_tpm <- read.table(file.path(dataset_path,"data_mrna_seq_tpm.txt"),header=TRUE, sep="\t")
+
+colnames(data_mrna_seq_tpm)
+
+
+data_mutations <- read.table(file.path(dataset_path,"data_mutations.txt"),header=TRUE, sep="\t")
+
+colnames(data_mutations)
+
+
+#data_sv <- read.table(file.path(dataset_path,"data_sv.txt"),header=TRUE, sep="\t")
+
+data_timeline_death <- read.table(file.path(dataset_path,"data_timeline_death.txt"),header=TRUE, sep="\t")
+
+colnames(data_timeline_death)
+
+
+data_timeline_diagnosis <- read.table(file.path(dataset_path,"data_timeline_diagnosis.txt"),header=TRUE, sep="\t")
+
+colnames(data_timeline_diagnosis)
+
+
+data_timeline_prior_treatment <- read.table(file.path(dataset_path,"data_timeline_prior_treatment.txt"),header=TRUE, sep="\t")
+
+
+colnames(data_timeline_prior_treatment)
+
+
+
+data_timeline_specimen <- read.table(file.path(dataset_path,"data_timeline_specimen.txt"),header=TRUE, sep="\t")
+
+colnames(data_timeline_specimen)
+
+
+data_timeline_treatment <- read.table(file.path(dataset_path,"data_timeline_treatment.txt"),header=TRUE, sep="\t")
+
+colnames(data_timeline_treatment)
+
+
+
+
+```
+      
+# data_clinical_patient
+
+```{r}
+data_clinical_patient$SEX[data_clinical_patient$SEX == "Male"] <- "M"
+data_clinical_patient$SEX[data_clinical_patient$SEX == "Female"] <- "F"
+data_clinical_patient$SEX <- as.factor(data_clinical_patient$SEX)
+
+data_clinical_patient$OS_STATUS[data_clinical_patient$OS_STATUS == "DECEASED"] <- "DEAD"
+data_clinical_patient$OS_STATUS[data_clinical_patient$OS_STATUS == "LIVING"] <- "ALIVE"
+data_clinical_patient$OS_STATUS <- as.factor(data_clinical_patient$OS_STATUS)
+
+# Drop cohort 
+data_clinical_patient <- data_clinical_patient %>% select(-COHORT)
+
+data_clinical_patient$IGHV_MUTATION_STATUS[data_clinical_patient$IGHV_MUTATION_STATUS == "unmutated"] <- "UNMUTATED"
+data_clinical_patient$IGHV_MUTATION_STATUS[data_clinical_patient$IGHV_MUTATION_STATUS == "mutated"] <- "MUTATED"
+data_clinical_patient$IGHV_MUTATION_STATUS[data_clinical_patient$IGHV_MUTATION_STATUS == ""] <- NA
+data_clinical_patient$IGHV_MUTATION_STATUS <- as.factor(data_clinical_patient$IGHV_MUTATION_STATUS)
+
+
+data_clinical_patient$TREATMENT_STATUS[data_clinical_patient$TREATMENT_STATUS == "Pre-treatment"] <- "PRE_T"
+data_clinical_patient$TREATMENT_STATUS[data_clinical_patient$TREATMENT_STATUS == "Post-treatment"] <- "POST_T"
+data_clinical_patient$TREATMENT_STATUS[data_clinical_patient$TREATMENT_STATUS == ""] <- NA
+data_clinical_patient$TREATMENT_STATUS <- as.factor(data_clinical_patient$TREATMENT_STATUS)
+
+data_clinical_patient$PRIOR_TREATMENT_CATEGORY[data_clinical_patient$PRIOR_TREATMENT_CATEGORY == "Untreated"] <- "UNTREATED"
+data_clinical_patient$PRIOR_TREATMENT_CATEGORY[data_clinical_patient$PRIOR_TREATMENT_CATEGORY == "Chemo + Ab"] <- "CHEMO_AB"
+data_clinical_patient$PRIOR_TREATMENT_CATEGORY[data_clinical_patient$PRIOR_TREATMENT_CATEGORY == "Chemo + no Ab"] <- "CHEMO_NO_AB"
+data_clinical_patient$PRIOR_TREATMENT_CATEGORY[data_clinical_patient$PRIOR_TREATMENT_CATEGORY == "Ab + no Chemo"] <- "AB_NO_CHEMO"
+data_clinical_patient$PRIOR_TREATMENT_CATEGORY[data_clinical_patient$PRIOR_TREATMENT_CATEGORY == "LEN + Ab"] <- "LEN_AB"
+data_clinical_patient$PRIOR_TREATMENT_CATEGORY[data_clinical_patient$PRIOR_TREATMENT_CATEGORY == "Rel/Ref"] <- "REL_REF"
+data_clinical_patient$PRIOR_TREATMENT_CATEGORY[is.na(data_clinical_patient$PRIOR_TREATMENT_CATEGORY)] <- NA
+data_clinical_patient$PRIOR_TREATMENT_CATEGORY <- as.factor(data_clinical_patient$PRIOR_TREATMENT_CATEGORY)
+
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "Chemo + Ab"] <- "CHEMO_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "LEN + chemo + Ab"] <- "LEN_CHEMO_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "Chemo + no Ab"] <- "CHEMO_NO_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "SRC inhibitor"] <- "SRC_INHIBITOR"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "BCL2 + chemo"] <- "BCL2_CHEMO"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "Ab + no chemo"] <- "AB_NO_CHEMO"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "BTK inhibitor"] <- "BTK_INHIBITOR"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "SYK inhibitor"] <- "SYK_INHIBITOR"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "LEN + Ab"] <- "LEN_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "BTK + chemo + Ab"] <- "BTK_CHEMO_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "PI3K + chemo + Ab"] <- "PI3K_CHEMO_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "PI3K + Ab"] <- "PI3K_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "CART + I"] <- "CART_I"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "PI3K inhibitor"] <- "PI3K_INHIBITOR"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "BCL2 inhibitor"] <- "BCL2_INHIBITOR"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "BCL2 + Ab"] <- "BCL2_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "BCL2 + BTK"] <- "BCL2_BTK"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING[data_clinical_patient$TREATMENT_AFTER_SAMPLING == "BTK inhibitor + Ab"] <- "BTK_INHIBITOR_AB"
+data_clinical_patient$TREATMENT_AFTER_SAMPLING <- as.factor(data_clinical_patient$TREATMENT_AFTER_SAMPLING)
+
+data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-u1"] <- "EC_U1"
+data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-u2"] <- "EC_U2"
+data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-m4"] <- "EC_M4"
+data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-m3"] <- "EC_M3"
+data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-i"] <- "EC_I"
+data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-o"] <- "EC_O"
+data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-m1"] <- "EC_M1"
+data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-m2"] <- "EC-m2"
+data_clinical_patient$EXPRESSION_CLUSTER <- as.factor(data_clinical_patient$EXPRESSION_CLUSTER)
+
+summary(data_clinical_patient$EXPRESSION_CLUSTER)
+
+#unique(data_clinical_patient$EXPRESSION_CLUSTER)
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "0"] <- 0
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "2258"] <- 1
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-u1"] <- 2
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-u2"] <- 3
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-m4"] <- 4
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-m3"] <- 5
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-i"] <- 6
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-o"] <- 7
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-m1"] <- 8
+#data_clinical_patient$EXPRESSION_CLUSTER[data_clinical_patient$EXPRESSION_CLUSTER == "EC-m2"] <- 9
+#data_clinical_patient$EXPRESSION_CLUSTER <- as.numeric(data_clinical_patient$EXPRESSION_CLUSTER)
+
+data_clinical_patient$FFS_STATUS[data_clinical_patient$FFS_STATUS == "1:Failure"] <- "1"
+data_clinical_patient$FFS_STATUS[data_clinical_patient$FFS_STATUS == "0:FailureFree"] <- "0"
+data_clinical_patient$FFS_STATUS <- as.factor(data_clinical_patient$FFS_STATUS)
+
+summary(data_clinical_patient)
+
+length(unique(data_clinical_patient$PATIENT_ID))
+```
+
+```{r}
+write.table(data_clinical_patient, "/Users/sorenbasnet/Documents/Github/PYTHON/STAT_443/cll_driver_outcome/data/data_clinical_patient_feb21.txt", sep=" ", row.names = FALSE, quote = FALSE)
+```
+
+
