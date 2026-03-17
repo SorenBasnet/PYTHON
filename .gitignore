@@ -7,3 +7,4 @@ STAT_443/tcga_brca/R/.Rhistory
 STAT_443/tcga_brca/R/my_dataset_feb_14.*
 STAT_443/cll_driver_outcome/data/cll_broad_2022/
 STAT_443/cll_driver_outcome/data/data_clinical_patient_feb21.txt
+*.RData*
