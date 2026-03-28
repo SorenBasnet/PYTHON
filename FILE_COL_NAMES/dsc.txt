@@ -1,6 +1,6 @@
 /Users/sorenbasnet/Documents/Github/PYTHON/DATA_SAMPLE/mtcars.csv
-model s
-mpg n
+model x
+mpg d
 cyl n
 disp n
 hp n
