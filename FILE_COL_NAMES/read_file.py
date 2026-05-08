@@ -5,10 +5,18 @@ class Read_File:
     def __init__(self, data_file_path: str) -> None: 
         self.data_file_path = data_file_path 
 
+
     def read_file(self) -> None: 
+
+
+        """
+        Function      : Opens a dsc.txt file and documents column names along with 
+                        a letter signifying the type of variable in column data
+        Parameters    : self
+        Returns       : None but makes a dsc.txt file 
+        """
         
         data = pd.read_csv(self.data_file_path)
-        #print(data.dtypes)
 
         dsc_file = open("dsc.txt", "w")
 
@@ -21,6 +29,12 @@ class Read_File:
                 dsc_file.write(col_name + " s\n")
 
             elif pd.api.types.is_numeric_dtype(data[col_name]):
+                dsc_file.write(col_name + " n\n")
+            
+            elif pd.api.types.is_float_dtype(data[col_name]): 
+                dsc_file.write(col_name + " n\n")
+
+            elif pd.api.types.is_int64_dtype(data[col_name]): 
                 dsc_file.write(col_name + " n\n")
 
             else:
