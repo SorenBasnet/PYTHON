@@ -21,7 +21,3 @@ for num, count in counts.most_common():
     print(f"Dice Sum:{num}, Number of Counts : {count}, Percentage : {percentage}")
 
 
-
-
-
-
