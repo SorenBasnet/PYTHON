@@ -5,9 +5,7 @@ class Read_File:
     def __init__(self, data_file_path: str) -> None: 
         self.data_file_path = data_file_path 
 
-
     def read_file(self) -> None: 
-
 
         """
         Function      : Opens a dsc.txt file and documents column names along with 
@@ -39,11 +37,9 @@ class Read_File:
 
             else:
                 dsc_file.write(col_name + " o\n")
-            
 
         dsc_file.close()
 
-            
 
 """
 Running tests

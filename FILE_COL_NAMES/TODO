@@ -1,4 +1,4 @@
-1) needs to make variables like x,d and stuff in the read_file.py 
+# DONE 1) needs to make variables like x,d and stuff in the read_file.py 
 2) need to be able to filter caterogircal and numerical variables cleanly from read_file.py
 	- for models like linear regression which requires numerical values in sklearn 
 3) need to make the functions into class 
