@@ -6,8 +6,6 @@ from sklearn.metrics import mean_squared_error
 #
 # read_dsc : Read the file 
 #
-
-
 def read_dsc(file_path:str) -> list: 
 
     col_name_list = []
@@ -42,45 +40,24 @@ def read_dsc(file_path:str) -> list:
         
         return return_list
 
-"""
-def data_col(data_file_path, list:list): 
 
-    data = pd.read_csv(data_file_path)
-    data = data[list]
-
-    return data 
-"""
-
-
-def execute_LR(): 
-
-    # TODO : need to 1) Read the dsc. 2) Then allocate the columns to X and y. ( Know the type of 
-    #        variable X and y are. 
-
-    dsc = read_dsc("/Users/sorenbasnet/Documents/Github/PYTHON/FILE_COL_NAMES/dsc.txt")
+def generate_df(dsc_file_path:str): 
+    dsc = read_dsc(dsc_file_path)
 
     data_file_path  = dsc[0][0]
     dsc_dependent = dsc[1]
     dsc_response_name = dsc[2]
-
-    print(data_file_path)
-    print(dsc_dependent)
-    print(dsc_response_name)
-
     y = pd.read_csv(data_file_path, usecols=dsc_dependent)
-    print(y.head())
-
     X = pd.read_csv(data_file_path, usecols=dsc_response_name)
-    print(X.head())
 
-    print(len(X))
-    print(len(y))
- 
+    return X, y
+
+"""
+def execute_LR(dsc_file_path:str): 
+
+    X, y = generate_df(dsc_file_path)
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
-
-
-    print(len(X_train))
-    print(len(y_train))
 
     reg = linear_model.LinearRegression()
     reg.fit(X_train, y_train)
@@ -90,8 +67,9 @@ def execute_LR():
     mse = mean_squared_error(y_test, y_pred)
     
     print(mse)
+"""
 
 if __name__=='__main__': 
-    execute_LR()
+    generate_df(dsc_file_path)
 
 
