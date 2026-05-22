@@ -1,9 +1,11 @@
 import pandas as pd
+import os
+import sys
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
-def read_file(data_file_path) -> None:
+def read_file(data_file_path, dependent_variable) -> None:
 
      """
      Function      : Opens a dsc.txt file and documents column names along with
@@ -12,6 +14,7 @@ def read_file(data_file_path) -> None:
      Returns       : None but makes a dsc.txt file
      """
 
+     dependent_variable_found = False
      data = pd.read_csv(data_file_path)
 
      dsc_file = open("dsc.txt", "w")
@@ -21,7 +24,11 @@ def read_file(data_file_path) -> None:
      for col_name in data.columns:
          print(type(data[col_name][0]))
 
-         if pd.api.types.is_string_dtype(data[col_name]):
+         if data[col_name] == dependent_variable:
+             dependent_variable_found = True
+             dsc_file.write(col_name + " s\n")
+
+         elif pd.api.types.is_string_dtype(data[col_name]):
              dsc_file.write(col_name + " s\n")
 
          elif pd.api.types.is_numeric_dtype(data[col_name]):
@@ -32,9 +39,11 @@ def read_file(data_file_path) -> None:
 
          elif pd.api.types.is_int64_dtype(data[col_name]):
              dsc_file.write(col_name + " n\n")
-
          else:
              dsc_file.write(col_name + " o\n")
+
+     if dependent_variable_found == False:
+         sys.exit(f"ERROR : Dependent variable {dependent_variable} not found.")
 
      dsc_file.close()
 
@@ -73,12 +82,15 @@ def read_dsc(file_path:str) -> list:
         return_list.append(response_name)
         return_list.append(col_name_list)
 
+        print(return_list)
+
         return return_list
 
 
-def generate_df(dsc_file_path:str):
+def generate_df(dsc_file_path:str, dependent_variable:str):
 
-    read_file(dsc_file_path)
+    read_file(dsc_file_path, dependent_variable)
+
 
     dsc = read_dsc(dsc_file_path)
 
@@ -108,6 +120,7 @@ def execute_LR(dsc_file_path:str):
 """
 
 if __name__=='__main__':
-    generate_df(dsc_file_path)
+
+    generate_df("/Users/sorenbasnet/Documents/Github/PYTHON/FILE_COL_NAMES/src/dsc2/dsc.txt", "mpg")
 
 
