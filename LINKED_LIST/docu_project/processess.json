@@ -1,0 +1,41 @@
+{
+  "123": [
+    {
+      "data": "A",
+      "hault": [],
+      "blockade": false
+    },
+    {
+      "data": "B",
+      "hault": [],
+      "blockade": false
+    },
+    {
+      "data": "C",
+      "hault": [],
+      "blockade": false
+    }
+  ],
+  "345": [
+    {
+      "data": "D",
+      "hault": [],
+      "blockade": false
+    },
+    {
+      "data": "E",
+      "hault": [],
+      "blockade": false
+    },
+    {
+      "data": "F",
+      "hault": [],
+      "blockade": false
+    },
+    {
+      "data": "G",
+      "hault": [],
+      "blockade": false
+    }
+  ]
+}
